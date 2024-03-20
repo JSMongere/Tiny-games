@@ -1,0 +1,66 @@
+pip install pygame
+
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+PLAYER_SIZE = 32
+
+# Set up some colors
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+
+# Create the game screen
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((PLAYER_SIZE, PLAYER_SIZE))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+
+    def update(self, platforms):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP] and self.rect.bottom >= HEIGHT:
+            self.rect.y -= 5
+        if keys[pygame.K_DOWN] and self.rect.bottom < HEIGHT:
+            self.rect.y += 5
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= 5
+        if keys[pygame.K_RIGHT] and self.rect.right < WIDTH:
+            self.rect.x += 5
+
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y, width, height):
+        super().__init__()
+        self.image = pygame.Surface((width, height))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+# Create a group for the player and platforms
+player = Player()
+platforms = pygame.sprite.Group()
+
+# Add platforms
+platforms.add(Platform(0, HEIGHT-32, WIDTH, 32))
+
+# Game loop
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    screen.fill((0, 0, 0))
+    platforms.draw(screen)
+    player.update(platforms)
+    screen.blit(player.image, player.rect)
+    pygame.display.flip()
+    pygame.time.Clock().tick(60)
