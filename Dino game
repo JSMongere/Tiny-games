@@ -1,0 +1,48 @@
+import pyautogui
+import time
+import random
+import keyboard
+
+# Constants
+SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
+DINO_Y = SCREEN_HEIGHT * 3 / 4
+CACTUS_START_X = SCREEN_WIDTH
+CACTUS_WIDTH = 30
+CACTUS_MIN_GAP = 100
+CACTUS_MAX_GAP = 200
+JUMP_HEIGHT = SCREEN_HEIGHT / 2
+JUMP_DURATION = 0.2
+
+def jump():
+    pyautogui.moveTo(DINO_X, DINO_Y - JUMP_HEIGHT, duration=0.1)
+    pyautogui.moveTo(DINO_X, DINO_Y, duration=JUMP_DURATION)
+
+def duck():
+    pyautogui.moveTo(DINO_X, DINO_Y + JUMP_HEIGHT, duration=0.1)
+    pyautogui.moveTo(DINO_X, DINO_Y, duration=JUMP_DURATION)
+
+def detect_obstacle():
+    pixels = pyautogui.screenshot().load()
+    for x in range(CACTUS_START_X, 0, -1):
+        for y in range(DINO_Y, DINO_Y + 20):
+            r, g, b = pixels[x, y]
+            if r == 255 and g == 0 and b == 0:
+                return x
+    return -1
+
+def main():
+    global DINO_X
+    DINO_X = SCREEN_WIDTH // 2
+    pyautogui.moveTo(DINO_X, DINO_Y, duration=0.1)
+
+    while True:
+        time.sleep(0.1)
+        obstacle_x = detect_obstacle()
+        if obstacle_x > 0:
+            if obstacle_x < CACTUS_START_X - CACTUS_WIDTH - CACTUS_MIN_GAP:
+                jump()
+            elif obstacle_x > CACTUS_START_X + CACTUS_WIDTH + CACTUS_MAX_GAP:
+                duck()
+
+if __name__ == "__main__":
+    main()
