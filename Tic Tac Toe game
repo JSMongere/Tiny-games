@@ -1,0 +1,70 @@
+# Tic-Tac-Toe game in Python
+
+# Define the game board
+board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
+
+# Define a function to display the game board
+def display_board(board):
+    for row in board:
+        print(' '.join(row))
+
+# Define a function to check for a winner
+def check_winner(board):
+    # Check rows
+    for row in board:
+        if row[0] == row[1] == row[2] != '-':
+            return row[0]
+    # Check columns
+    for col in range(3):
+        if board[0][col] == board[1][col] == board[2][col] != '-':
+            return board[0][col]
+    # Check diagonals
+    if board[0][0] == board[1][1] == board[2][2] != '-':
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] != '-':
+        return board[0][2]
+    return None
+
+# Define a function to play the game
+def play_game():
+    # Set the initial player
+    player = 'X'
+    # Set the winner
+    winner = None
+    # While there is no winner and there are empty cells
+    while not winner and '-' in [cell for row in board for cell in row]:
+        # Display the game board
+        display_board(board)
+        # Get the input from the player
+        row, col = get_input(player)
+        # Place the player's symbol on the game board
+        board[row][col] = symbol
+        # Check if there is a winner
+        winner = check_winner(board)
+        # Change the player
+        player = 'O' if player == 'X' else 'X'
+    # Display the game board
+    display_board(board)
+    # If there is a winner
+    if winner:
+        # Print the winner
+        print(f'Player {winner} wins!')
+    # If there is no winner
+    else:
+        # Print the tie
+        print('Tie game.')
+
+# Define a function to get the input from the player
+def get_input(player):
+    # Get the row
+    row = int(input(f'Player {player}, enter row (0-2): '))
+    # Get the column
+    col = int(input(f'Player {player}, enter col (0-2): '))
+    # Return the row and column
+    return row, col
+
+# Define the player's symbol
+symbol = player
+
+# Start the game
+play_game()
