@@ -1,0 +1,148 @@
+import pygame
+
+# Initialize Pygame
+pygame.init()
+
+# Set up the game window
+width = 800
+height = 600
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("My RPG Game")
+
+# Load the player sprite image
+player_image = pygame.image.load("player.png")
+
+# Get the rectangular dimensions of the player sprite
+player_rect = player_image.get_rect()
+
+# Set the starting position of the player sprite
+player_rect.center = (width // 2, height // 2)
+
+# Set the game running variable
+running = True
+
+# Main game loop
+while running:
+
+    # Check for events
+    for event in pygame.event.get():
+
+        # If the user clicks the close button, stop the game
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Fill the game window with a white background
+    screen.fill((255, 255, 255))
+
+    # Draw the player sprite onto the game window
+    screen.blit(player_image, player_rect)
+
+    # Update the game window
+    pygame.display.flip()
+
+# Quit Pygame
+pygame.quit()
+
+
+# Set the player speed
+player_speed = 5
+
+# Game loop
+while running:
+
+    # Check for events
+    for event in pygame.event.get():
+
+        # If the user clicks the close button, stop the game
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Get the list of keys that are currently pressed
+    keys = pygame.key.get_pressed()
+
+    # Move the player sprite based on the keys pressed
+    if keys[pygame.K_LEFT]:
+        player_rect.move_ip(-player_speed, 0)
+    if keys[pygame.K_RIGHT]:
+        player_rect.move_ip(player_speed, 0)
+    if keys[pygame.K_UP]:
+        player_rect.move_ip(0, -player_speed)
+    if keys[pygame.K_DOWN]:
+        player_rect.move_ip(0, player_speed)
+
+    # Fill the game window with a white background
+    screen.fill((255, 255, 255))
+
+    # Check for collisions between the player and enemy sprites
+    if player_rect.colliderect(enemy_rect):
+        # Handle the collision here
+        pass
+
+    # Draw the player and enemy sprites onto the game window
+    screen.blit(player_image, player_rect)
+
+    # Update the game window
+    pygame.display.flip()
+
+# Quit Pygame
+pygame.quit()
+
+
+class Player:
+
+    def __init__(self):
+        # Initialize the player's health
+        self.health = 100
+
+    # Getter function for the player's health
+    def get_health(self):
+        return self.health
+
+
+# Create a Player object
+player = Player()
+
+# Game loop
+while running:
+
+    # Check for events
+    for's attacks, and the player's health. Here's an example of how you can do this:
+
+```python
+import random
+ event in pygame.event.get():
+
+        # If the user clicks the close button, stop the game
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Get the player's health
+   
+class Battle:
+
+    def __init__(self, player, enemy):
+        # Initialize the player and enemy
+        self.player = player
+        self.enemy = enemy
+
+        # Set the player's attack power
+        self.player_ player_health = player.get_health()
+
+    # Update the game window with the player's health
+    health_text = font.render(f"Health: {player_health}", True, (0, 0, 0))
+    screen.blit(health_text,attack = 10
+
+        # Set the enemy's attack power
+        self.enemy_attack = 5
+
+        # Set the player's initial health
+        self.player_health = player.get_health()
+
+    # Function to handle the player's attack
+    def player_attack(self):
+        # Calculate the damage the player inflicts
+        damage = self.player_attack * (1 + random.randint (10, 10))
+
+    # Update the game window
+    pygame.display.flip()
+
