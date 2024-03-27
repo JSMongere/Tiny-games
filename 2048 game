@@ -1,0 +1,159 @@
+import random
+import sys
+
+# Constants
+LENGTH = 4
+
+# Colors
+BLACK = (0, 0, 0)
+BLUE = (0, 0, 255)
+DARKGREY = (64, 64, 64)
+GREEN = (0, 255, 0)
+WHITE = (255, 255, 255)
+
+# Grid
+grid = [[0 for x in range(LENGTH)] for y in range(LENGTH)]
+
+# User input
+def check_input():
+    if sys.stdin in sys.modules['sys'].__dict__:
+        inp = sys.stdin.readline()
+        return inp.strip()
+
+def get_input():
+    valid_inputs = ['w', 'a', 's', 'd']
+    while True:
+        check = check_input()
+        if check in valid_inputs:
+            return check
+
+def switch_on(b):
+    if b == 0:
+        return 1
+    elif b == 1:
+        return 0
+
+# Merge the cells in the grid
+def merge(dx, dy):
+    for x in range(LENGTH):
+        for y in range(LENGTH - 1):
+            if grid[y][x] == 0:
+                continue
+            if grid[y + dy][x + dx] == grid[y][x] and grid[y + dy][x + dx] != 0:
+                grid[y][x] *= 2
+                grid[y + dy][x + dx] = 0
+                return 1
+    return 0
+
+# Update the grid after user input
+def update_grid():
+    # Move the grid in the given direction
+    move(0, 1)
+    move(1, 0)
+    move(0, -1)
+    move(-1, 0)
+
+    # After the grid has been moved, shift everything so there is a blank space
+    for x in range(LENGTH):
+        for y in range(LENGTH):
+            if grid[y][x] == 0:
+                for i in range(y, LENGTH):
+                    if grid[i][x] != 0:
+                        grid[y][x], grid[i][x] = grid[i][x], 0
+                        break
+
+# Move the cells in the given direction
+def move(dx, dy):
+    for x in range(LENGTH):
+        for y in range(LENGTH - 1):
+            if grid[y + dy][x + dx] == 0:
+                grid[y][x], grid[y + dy][x + dx] = 0, grid[y][x]
+
+# Print the grid to console
+def print_grid():
+    for y in range(LENGTH):
+        for x in range(LENGTH):
+            if grid[y][x] != 0:
+                print(str(grid[y][x]).rjust(len(str(get_max_value()))), end=" ")
+            else:
+                print("    ", end="")
+        print()
+
+# Get maximum value in the grid
+def get_max_value():
+    max_ = 0
+    for y in range(LENGTH):
+        for x in range(LENGTH):
+            if grid[y][x] > max_:
+                max_ = grid[y][x]
+    return max_
+
+# Start the game
+def start_game():
+    grid[random.randint(0, LENGTH - 1)][random.randint(0, LENGTH - 1)] = 2
+    grid[random.randint(0, LENGTH - 1)][random.randint(0, LENGTH - 1)] = 2
+
+# Start the game
+start_game()
+
+while True:
+    print_grid()
+
+    if is_full():
+        print("Game over!")
+        break
+
+    print("Your score: " + str(get_score()))
+    inpt = get_input()
+    update_grid_via_input(inpt)
+    input("Press enter to continue...")
+
+print("Thanks for playing!")
+
+# Functions for theupdate method
+def add_value():
+    while True:
+        x, y = random.randint(0, LENGTH - 1), random.randint(0, LENGTH - 1)
+        if grid[y][x] == 0:
+            grid[y][x] = 2
+            return
+
+def update_grid_via_input(inpt):
+    if inpt == "w":
+        for i in range(LENGTH):
+            if merge(0, 1) == 1:
+                add_value()
+    elif inpt == "a":
+        if merge(1, 0) == 1:
+            add_value()
+    elif inpt == "s":
+        for i in range(LENGTH):
+            if merge(0, -1) == 1:
+                add_value()
+    elif inpt == "d":
+        if merge(-1, 0) == 1:
+            add_value()
+
+# Functions for game over method
+def is_full():
+    for y in range(LENGTH):
+        for x in range(LENGTH):
+            if grid[y][x] == 0:
+                return False
+
+    return True
+
+def get_score():
+    return sum(sum(x) for x in grid)
+
+# Functions for the game over method
+def is_full():
+    for y in range(LENGTH):
+        for x in range(LENGTH):
+            if grid[y][x] == 0:
+                return False
+
+    return True
+
+def get_score():
+    return sum(
