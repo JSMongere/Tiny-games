@@ -1,0 +1,112 @@
+import pygame
+import time
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH = 800
+HEIGHT = 600
+CAR_SIZE = 50
+CAR_SPEED = 5
+OBSTACLE_SPEED = 3
+FONT_SIZE = 36
+
+# Set up some colors
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+
+# Create the game screen
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Load the car image
+car_image = pygame.image.load('car.png')
+car_rect = car_image.get_rect()
+
+# Set up the clock
+clock = pygame.time.Clock()
+
+# Set up the obstacles
+obstacle_list = []
+obstacle_width = 50
+obstacle_height = 100
+
+# Create a function to add obstacles
+def add_obstacle():
+    obstacle = {
+        'rect': pygame.Rect(
+            WIDTH,
+            random.randint(HEIGHT - OBSTACLE_HEIGHT - 100, HEIGHT - 100),
+            obstacle_width,
+            obstacle_height
+        ),
+        'color': RED,
+        'speed': OBSTACLE_SPEED
+    }
+    obstacle_list.append(obstacle)
+
+# Create a function to update the obstacles
+def update_obstacles():
+    for obstacle in obstacle_list:
+        obstacle['rect'].x -= obstacle['speed']
+
+# Create a function to draw the obstacles
+def draw_obstacles():
+    for obstacle in obstacle_list:
+        pygame.draw.rect(screen, obstacle['color'], obstacle['rect'])
+
+# Create a function to check if the car has collided with an obstacle
+def check_collision():
+    for obstacle in obstacle_list:
+        if car_rect.colliderect(obstacle['rect']):
+            return True
+    return False
+
+# Add the initial obstacles
+add_obstacle()
+add_obstacle()
+
+# Game loop
+running = True
+while running:
+    # Fill the screen with white
+    screen.fill(WHITE)
+
+    # Draw the car
+    screen.blit(car_image, car_rect)
+
+    # Draw the obstacles
+    draw_obstacles()
+
+    # Check for user input
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                car_rect.x -= CAR_SPEED
+            if event.key == pygame.K_RIGHT:
+                car_rect.x += CAR_SPEED
+
+    # Update the obstacles
+    update_obstacles()
+
+    # Check for collision
+    if check_collision():
+        font = pygame.font.Font(None, FONT_SIZE)
+        text = font.render('Game Over', True, RED)
+        screen.blit(text, (WIDTH/2-100, HEIGHT/2))
+        pygame.display.flip()
+        time.sleep(2)
+        running = False
+
+    # Update the display
+    pygame.display.flip()
+
+    # Cap the frame rate
+    clock.tick(60)
+
+# Quit Pygame
+pygame.quit()
