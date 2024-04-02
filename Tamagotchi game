@@ -1,0 +1,49 @@
+import random
+import time
+
+class Tamagotchi:
+    def __init__(self, name):
+        self.name = name
+        self.hunger = random.randint(0, 100)
+        self.boredom = random.randint(0, 100)
+        self.sounds = ["Hello", "Bye", "Hi", "Hey"]
+
+    def clock_tick(self):
+        self.hunger += 10
+        self.boredom += 10
+
+    def __str__(self):
+        mood = "happy" if self.hunger <= 50 and self.boredom <= 50 else "bored"
+        return f"{self.name} is currently {mood} with a hunger level of {self.hunger} and boredom level of {self.boredom}."
+
+    def feed(self):
+        self.hunger = max(0, self.hunger - 50)
+
+    def teach(self, sound):
+        self.sounds.append(sound)
+
+    def greet(self):
+        print(random.choice(self.sounds))
+
+    def reduce_boredom(self):
+        self.boredom = max(0, self.boredom - 20)
+
+threshold = 50
+pet = Tamagotchi("Pixie")
+
+while True:
+    if pet.hunger > threshold or pet.boredom > threshold:
+        print(pet)
+    if pet.hunger > threshold:
+        print("Your pet is hungry! Feed it!")
+        pet.feed()
+        time.sleep(1)
+    if pet.boredom > threshold:
+        print("Your pet is bored! Teach it something!")
+        new_sound = input("What do you want to teach your pet? ")
+        pet.teach(new_sound)
+        pet.reduce_boredom()
+        time.sleep(1)
+    print(pet.name, "says:", random.choice(pet.sounds))
+    pet.clock_tick()
+    time.sleep(1)
