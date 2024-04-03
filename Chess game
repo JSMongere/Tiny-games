@@ -1,0 +1,74 @@
+import pygame
+import sys
+
+# Chess board size
+BOARD_SIZE = 8
+SQ_SIZE = 100
+
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+
+# Initialize Pygame
+pygame.init()
+
+# Set up display
+screen = pygame.display.set_mode((BOARD_SIZE * SQ_SIZE, BOARD_SIZE * SQ_SIZE))
+pygame.display.set_caption("Chess Game")
+
+# Set up clocks
+clock = pygame.time.Clock()
+
+# Create chess board
+board = [['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'] for _ in range(BOARD_SIZE)]
+
+# Create piece images
+pieces = {
+    'R': pygame.image.load('w_rook.png'),
+    'N': pygame.image.load('w_knight.png'),
+    'B': pygame.image.load('w_bishop.png'),
+    'Q': pygame.image.load('w_queen.png'),
+    'K': pygame.image.load('w_king.png'),
+    'P': pygame.image.load('w_pawn.png'),
+    'r': pygame.image.load('b_rook.png'),
+    'n': pygame.image.load('b_knight.png'),
+    'b': pygame.image.load('b_bishop.png'),
+    'q': pygame.image.load('b_queen.png'),
+    'k': pygame.image.load('b_king.png'),
+    'p': pygame.image.load('b_pawn.png')
+}
+
+# Render pieces
+piece_rects = []
+for i in range(BOARD_SIZE):
+    for j in range(BOARD_SIZE):
+        if board[i][j] != '.':
+            piece_image = pieces[board[i][j]]
+            piece_rect = piece_image.get_rect(center=(j * SQ_SIZE + SQ_SIZE // 2, i * SQ_SIZE + SQ_SIZE // 2))
+            piece_rects.append((piece_image, piece_rect))
+
+# Game loop
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Draw board
+    for i in range(BOARD_SIZE):
+        for j in range(BOARD_SIZE):
+            if (i + j) % 2 == 0:
+                color = WHITE
+            else:
+                color = BLACK
+            pygame.draw.rect(screen, color, pygame.Rect(i * SQ_SIZE, j * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+    # Draw pieces
+    for piece_image, piece_rect in piece_rects:
+        screen.blit(piece_image, piece_rect)
+
+    # Update display
+    pygame.display.flip()
+
+    # Cap FPS
+    clock.tick(60)
