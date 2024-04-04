@@ -1,0 +1,242 @@
+import pygame
+import sys
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Define constants
+WIDTH, HEIGHT = 800, 800
+DIMENSION = 8
+SQ_SIZE = HEIGHT // DIMENSION
+MAX_DEPTH = 4
+
+# Define colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+# Define board and pieces
+board = [[0 for _ in range(DIMENSION)] for _ in range(DIMENSION)]
+pieces = []
+
+# Define functions
+def create_pieces():
+    for c in range(0, DIMENSION, 2):
+        for r in range(DIMENSION - 1, -1, -2):
+            pieces.append(Piece(c, r, RED))
+    for c in range(1, DIMENSION, 2):
+        for r in range(DIMENSION - 1, -1, -2):
+            pieces.append(Piece(c, r, GREEN))
+
+def draw_board():
+    for c in range(DIMENSION):
+        for r in range(DIMENSION):
+            pygame.draw.rect(screen, BLACK, pygame.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+            if board[c][r] != 0:
+                pygame.draw.circle(screen, WHITE, (c * SQ_SIZE + SQ_SIZE // 2, r * SQ_SIZE + SQ_SIZE // 2), SQ_SIZE // 4)
+                if board[c][r] == 1:
+                    screen.blit(RED_PIECE, (c * SQ_SIZE, r * SQ_SIZE))
+                elif board[c][r] == -1:
+                    screen.blit(GREEN_PIECE, (c * SQ_SIZE, r * SQ_SIZE))
+
+def draw_pieces():
+    for piece in pieces:
+        screen.blit(piece.image, (piece.x * SQ_SIZE, piece.y * SQ_SIZE))
+
+def handle_click(x, y):
+    for piece in pieces:
+        if (x // SQ_SIZE, y // SQ_SIZE) == (piece.x, piece.y):
+            piece.selected = not piece.selected
+
+def update_board():
+    for piece in pieces:
+        if piece.selected:
+            board[piece.x][piece.y] = 0
+            piece.x, piece.y = x // SQ_SIZE, y // SQ_SIZE
+            board[piece.x][piece.y] = piece.team
+
+def is_valid_move(x, y, team):
+    if board[x][y] == 0 and (x, y) in valid_moves[team]:
+        return True
+    return False
+
+def get_valid_moves(team):
+    valid_moves[team] = []
+    for piece in pieces:
+        if piece.team == team:
+            x, y = piece.x, piece.y
+            if board[x][y] == team:
+                for dx, dy in [(1, -1), (1, 1)]:
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < DIMENSION and 0 <= ny < DIMENSION:
+                        if board[nx][ny] == -team:
+                            valid_moves[team].append((x, y, nx, ny))
+    return valid_moves[team]
+
+def make_move(move, team):
+    x, y, nx, ny = move
+    board[nx][ny] = board[x][y]
+    board[x][y] = 0
+    for piece in pieces:
+       if piece.x == x and piece.y == y:
+            piece.x, piece.y = nx, ny
+            break
+
+def ai_move(team):
+    best_score = -sys.maxsize
+    best_move = None
+    for move in get_valid_moves(-team):
+        make_move(move, -team)
+        score = minimax(MAX_DEPTH, -team, -sys.maxsize, sys.maxsize)
+        make_move(move, team)
+        if score > best_score:
+            best_score = score
+            best_move = move
+    make_move(best_move, -team)
+
+def minimax(depth, team, alpha, beta):
+    if depth == 0:
+        return evaluate(team)
+    if team == 1:
+        max_eval = -sys.maxsize
+        for move in get_valid_moves(team):
+            make_move(move, team)
+            eval = minimax(depth - 1, -team, alpha, beta)
+            max_eval = max(max_eval, eval)
+            make_move(move, -team)
+            alpha = max(alpha, eval)
+            if beta <= alpha:
+                break
+        return max_eval
+    else:
+        min_eval = sys.maxsize
+        for move in get_valid_moves(team):
+            make_move(move, team)
+            eval = minimax(depth - 1, -team, alpha, beta)
+            min_eval = min(min_eval, eval)
+            make_move(move, -team)
+            beta = min(beta, eval)
+            if beta <= alpha:
+                break
+        return min_eval
+
+def evaluate(team):
+    score = 0
+    for c in range(0, DIMENSION, 2):
+        for r in range(DIMENSION - 1, -1, -2):
+            if board[c][r] == team:
+                score += 1
+            elif board[c][r] == -team:
+                score -= 1
+    return score
+
+# Define classes
+class Piece:
+    def __init__(self, x, y, team):
+        self.x, self.y = x, y
+        self.team = team
+        self.selected = False
+        if team == 1:
+            self.image = RED_PIECE
+        else:
+            self.image = GREEN_PIECE
+
+class Game:
+    def __init__(self):
+        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
+        self.clock = pygame.time.Clock()
+        self.font = pygame.font.SysFont("Arial", 24)
+        self.turn = 1
+        self.valid_moves = {1: [], -1: []}
+        self.create_pieces()
+
+    def run(self):
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = pygame.mouse.get_pos()
+                    self.handle_click(x, y)
+
+            self.screen.fill(BLUE)
+            self.draw_board()
+            self.draw_pieces()
+            self.draw_valid_moves()
+            self.draw_turn()
+            pygame.display.flip()
+            self.clock.tick(60)
+
+            if self.turn == 1:
+                self.turn = -1
+            else:
+                ai_move(self.turn)
+                self.turn *= -1
+
+    def handle_click(self, x, y):
+        if self.turn == 1:
+            self.update_board()
+            self.get_valid_moves(self.turn)
+            self.handle_click_ai(x, y)
+        else:
+            self.handle_click_human(x, y)
+
+    def handle_click_human(self, x, y):
+        for piece in pieces:
+            if (x // SQ_SIZE, y // SQ_SIZE) == (piece.x, piece.y):
+                piece.selected = not piece.selected
+
+    def handle_click_ai(self, x, y):
+        for piece in pieces:
+            if piece.selected:
+                piece.x, piece.y = x // SQ_SIZE, y // SQ_SIZE
+                self.update_board()
+                self.get_valid_moves(self.turn)
+                piece.selected = False
+
+    def draw_board(self):
+        for c in range(DIMENSION):
+            for r in range(DIMENSION):
+                pygame.draw.rect(self.screen, BLACK, pygame.Rect(c * SQ_SIZE, r * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+                if board[c][r] != 0:
+                    pygame.draw.circle(self.screen, WHITE, (c * SQ_SIZE + SQ_SIZE // 2, r * SQ_SIZE + SQ_SIZE // 2), SQ_SIZE // 4)
+                    if board[c][r] == 1:
+                        self.screen.blit(RED_PIECE, (c * SQ_SIZE, r * SQ_SIZE))
+                    elif board[c][r] == -1:
+                        self.screen.blit(GREEN_PIECE, (c * SQ_SIZE, r * SQ_SIZE))
+
+    def draw_pieces(self):
+        for piece in pieces:
+            self.screen.blit(piece.image, (piece.x * SQ_SIZE, piece.y * SQ_SIZE))
+
+    def draw_valid_moves(self):
+        if self.turn == 1:
+            for move in self.valid_moves[self.turn]:
+                x, y = move[0], move[1]
+                pygame.draw.rect(self.screen, RED, pygame.Rect(x * SQ_SIZE, y * SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+    def draw_turn(self):
+        text = self.font.render("Turn: {}".format(self.turn), True, WHITE)
+        self.screen.blit(text, (10, 10))
+
+    def create_pieces(self):
+        for c in range(0, DIMENSION, 2):
+            for r in range(DIMENSION - 1, -1, -2):
+                pieces.append(Piece(c, r, RED))
+        for c in range(1, DIMENSION, 2):
+            for r in range(DIMENSION - 1, -1, -2):
+                pieces.append(Piece(c, r, GREEN))
+
+# Initialize game
+game = Game()
+
+# Load images
+RED_PIECE = pygame.image.load("red_piece.png")
+GREEN_PIECE = pygame.image.load("green_piece.png")
+
+# Run game
+game.run()
