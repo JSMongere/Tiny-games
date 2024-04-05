@@ -1,0 +1,65 @@
+import arcade
+
+# Constants
+WIDTH = 640
+HEIGHT = 480
+BALL_RADIUS = 10
+PADDLE_WIDTH = 75
+PADDLE_HEIGHT = 15
+
+class Paddle(arcade.Sprite):
+    def __init__(self, position_x):
+        super().__init__(":resources:images/tiles/grassTiles/grassTile1.png", 0.5)
+        self.center_x = position_x
+        self.center_y = HEIGHT // 2
+        self.width = PADDLE_WIDTH
+        self.height = PADDLE_HEIGHT
+
+class Ball(arcade.Sprite):
+    def __init__(self):
+        super().__init__(":resources:images/space_shooter/playerShip1_orange.png", BALL_RADIUS)
+        self.center_x = WIDTH // 2
+        self.center_y = HEIGHT // 2
+        self.change_x = 3
+        self.change_y = 3
+
+class MyGame(arcade.Window):
+    def __init__(self):
+        super().__init__(WIDTH, HEIGHT, "Pong")
+        self.paddle_left = Paddle(PADDLE_WIDTH + 20)
+        self.paddle_right = Paddle(WIDTH - PADDLE_WIDTH - 20)
+        self.ball = Ball()
+
+    def on_draw(self):
+        arcade.start_render()
+        self.paddle_left.draw()
+        self.paddle_right.draw()
+        self.ball.draw()
+
+    def update(self, delta_time):
+        self.ball.center_x += self.ball.change_x
+        self.ball.center_y += self.ball.change_y
+
+        # Bounce off the top and bottom of the screen
+        if self.ball.top > HEIGHT or self.ball.bottom < 0:
+            self.ball.change_y *= -1
+
+        # Bounce off the paddles
+        if (self.ball.right > self.paddle_left.center_x and
+                self.ball.left < self.paddle_left.center_x and
+                self.ball.top > self.paddle_left.center_y - PADDLE_HEIGHT // 2 and
+                self.ball.bottom < self.paddle_left.center_y + PADDLE_HEIGHT // 2):
+            self.ball.change_x *= -1
+
+        if (self.ball.left < self.paddle_right.center_x and
+                self.ball.right > self.paddle_right.center_x and
+                self.ball.top > self.paddle_right.center_y - PADDLE_HEIGHT // 2 and
+                self.ball.bottom < self.paddle_right.center_y + PADDLE_HEIGHT // 2):
+            self.ball.change_x *= -1
+
+def main():
+    game = MyGame()
+    arcade.run()
+
+if __name__ == "__main__":
+    main()
