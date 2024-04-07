@@ -1,0 +1,57 @@
+import random
+
+def choose_word():
+    words = ["apple", "banana", "cherry", "grape", "orange", "pear", "strawberry"]
+    return random.choice(words)
+
+def display_word(secret_word, guessed_letters):
+    display = ""
+    for letter in secret_word:
+        if letter in guessed_letters:
+            display += letter
+        else:
+            display += "_"
+    return display
+
+def main():
+    secret_word = choose_word()
+    guessed_letters = []
+    attempts = 6
+    print("Welcome to the Word Guessing Game!")
+    print(display_word(secret_word, guessed_letters))
+    while "_" in display_word(secret_word, guessed_letters) and attempts > 0:
+        guess = input("Guess a letter: ").lower()
+        if len(guess) != 1 or not guess.isalpha():
+            print("Please enter a single letter.")
+            continue
+        if guess in guessed_letters:
+            print("You've already guessed that letter.")
+            continue
+        guessed_letters.append(guess)
+        if guess in secret_word:
+            print("Correct guess!")
+        else:
+            print("Incorrect guess.")
+            attempts -= 1
+        print(display_word(secret_word, guessed_letters))
+    if "_" in display_word(secret_word, guessed_letters):
+        print("Sorry, you lost! The secret word was: " + secret_word)
+    else:
+        print("Congratulations, you guessed the secret word!")
+
+if __name__ == "__main__":
+    main()
+
+
+def print_hints(secret_word, guessed_letters):
+    print("Hints:")
+    for letter in secret_word:
+        if letter.islower() and letter not in guessed_letters:
+            print("  " + letter.upper() + ": Letter is present in the word, but in a different spot.")
+        elif letter.isupper() and letter not in guessed_letters:
+            print("  " + letter + ": Letter is present in the word at that exact spot.")
+        elif letter not in guessed_letters:
+            print("  _: Letter is not present in the word.")
+
+# Add this line in the while loop
+print_hints(secret_word, guessed_letters)
