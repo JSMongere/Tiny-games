@@ -1,0 +1,122 @@
+class Tile:
+    def __init__(self, x, y, width, height, number):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.number = number
+        self.img = None
+        self.rect = pygame.Rect(x, y, width, height)
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, (255, 255, 255), self.rect)
+        font = pygame.font.Font(None, 36)
+        text = font.render(str(self.number), True, (0, 0, 0))
+        text_rect = text.get_rect(center=self.rect.center)
+        screen.blit(text, text_rect)
+
+class Frame:
+    def __init__(self, tiles, size):
+        self.tiles = tiles
+        self.size = size
+        self.grid = self.create_grid()
+
+    def create_grid(self):
+        grid = []
+        for i in range(0, self.size * self.size, self.size):
+            row = self.tiles[i:i + self.size]
+            grid.append(row)
+        return grid
+
+    def draw(self, screen):
+        for row in self.grid:
+            for tile in row:
+                tile.draw(screen)
+
+    def _is_move_valid(self, click):
+        moves = {
+            79: (0, 1),
+            80: (0, -1),
+            81: (1, 0),
+            82: (-1, 0)
+        }
+        for row in self.grid:
+            for cell in row:
+                move = moves[click.scancode]
+                tile_x = self.grid.index(row) + move[0]
+                tile_y = row.index(cell) + move[1]
+                if tile_x >= 0 and tile_x <= 2 and tile_y >= 0 and tile_y <= 2:
+                    new_cell = self.grid[tile_x][tile_y]
+                    if new_cell.img == None:
+                        return (cell, new_cell)
+                else:
+                    continue
+        return False
+
+    def handle_click(self, click):
+        c = self._is_move_valid(click)
+        try:
+            c[0].img, c[1].img = c[1].img, c[0].img
+        except:
+            return False
+
+class Game:
+    def __init__(self, size):
+        self.size = size
+        self.tiles = []
+        self.num_tiles = size * size - 1
+        self.create_tiles()
+        self.frame = Frame(self.tiles, self.size)
+        self.num_moves = 0
+        self.moves = []
+
+    def create_tiles(self):
+        for i in range(self.num_tiles):
+            x = (i % self.size) * (self.size * 50 + 10)
+            y = (i // self.size) * (self.size * 50 + 10)
+            tile = Tile(x, y, 50, 50, i + 1)
+            self.tiles.append(tile)
+        self.tiles.append(Tile(self.tiles[-1].x + 50 + 10, self.tiles[-1].y, 50, 50, None))
+
+    def draw(self, screen):
+        self.frame.draw(screen)
+        draw_tiles()
+
+    def check_complete(self):
+        for i in range(self.num_tiles):
+            if self.tiles[i].x != (i % self.size) * (self.size * 50 + 10) or self.tiles[i].y != (i // self.size) * (self.size * 50 + 10):
+                return False
+        return True
+
+    def main(self, frame_size):
+        pygame.init()
+        screen = pygame.display.set_mode(frame_size)
+        pygame.display.set_caption("Puzzle Game")
+        clock = pygame.time.Clock()
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for i in range(self.num_tiles):
+                        if self.tiles[i].collidepoint(event.pos):
+                            if self.tiles[i].img == None:
+                                if self.frame.handle_click(event):
+                                    self.num_moves += 1
+                                    self.moves.append(self.num_moves)
+            self.draw(screen)
+            if self.check_complete():
+                self.message(screen)
+            pygame.display.flip()
+            clock.tick(60)
+        pygame.quit()
+
+    def message(self, screen):
+        screen.fill((255, 255, 255), (5, 460, 440, 35))
+        instructions = self.font.render('You Win!!', True, (0, 0, 0))
+        screen.blit(instructions, (125, 460))
+
+def main():
+    game = Game(3)
+    game.main((400, 400))
