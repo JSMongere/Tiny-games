@@ -1,0 +1,30 @@
+from tabulate import tabulate
+
+# Create a list of lists containing the data for the table
+table_data = [
+    ["Name", "Age", "Score"],
+    ["Alice", 23, 85],
+    ["Bob", 27, 90],
+    ["Charlie", 21, 78],
+    ["David", 25, 92],
+]
+
+# Print the table using the tabulate module
+print(tabulate(table_data))
+
+# Ask the user to enter their name, age, and score
+name = input("Enter your name: ")
+age = int(input("Enter your age: "))
+score = int(input("Enter your score: "))
+
+# Add the user's data to the table
+table_data.append([name, age, score])
+
+# Print the updated table
+print(tabulate(table_data))
+
+# Determine the winner based on the score
+winner = max(table_data, key=lambda x: x[2])
+
+# Print the winner
+print(f"The winner is {winner[0]} with a score of {winner[2]}!")
