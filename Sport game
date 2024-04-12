@@ -1,0 +1,48 @@
+import random
+
+def display_score(player1, player2):
+    print(f"{player1.name}: {player1.score} - {player2.name}: {player2.score}")
+
+class Player:
+    def __init__(self, name, score=0):
+        self.name = name
+        self.score = score
+
+    def add_point(self):
+        self.score += 1
+
+class TennisGame:
+    def __init__(self, player1, player2):
+        self.player1 = player1
+        self.player2 = player2
+
+    def play_point(self, server):
+        if random.randint(0, 1) == 0:
+            server.add_point()
+        else:
+            (self.player1, self.player2) = (self.player2, self.player1)
+
+    def display_score(self):
+        display_score(self.player1, self.player2)
+
+    def winner(self):
+        if self.player1.score >= 4 and self.player1.score - self.player2.score >= 2:
+            return self.player1
+        elif self.player2.score >= 4 and self.player2.score - self.player1.score >= 2:
+            return self.player2
+        else:
+            return None
+
+player1 = Player("Player 1")
+player2 = Player("Player 2")
+
+game = TennisGame(player1, player2)
+
+while True:
+    game.display_score()
+    server = input("Who is serving? ")
+    game.play_point(player1 if server == "Player 1" else player2)
+    winner = game.winner()
+    if winner:
+        print(f"{winner.name} wins!")
+        break
