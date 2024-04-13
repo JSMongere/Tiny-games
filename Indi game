@@ -1,0 +1,56 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+PLAYER_SIZE = 32
+
+# Set up some colors
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+
+# Create the game screen
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Create a player object
+player = pygame.Rect(WIDTH / 2, HEIGHT / 2, PLAYER_SIZE, PLAYER_SIZE)
+
+# Set up the game clock
+clock = pygame.time.Clock()
+
+# Set up the game variables
+game_over = False
+
+# Game loop
+while not game_over:
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Player movement
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        player.x -= 5
+    if keys[pygame.K_RIGHT]:
+        player.x += 5
+    if keys[pygame.K_UP]:
+        player.y -= 5
+    if keys[pygame.K_DOWN]:
+        player.y += 5
+
+    # Game logic
+    if player.y > HEIGHT - PLAYER_SIZE:
+        game_over = True
+
+    # Drawing
+    screen.fill(WHITE)
+    pygame.draw.rect(screen, RED, player)
+    pygame.display.flip()
+
+    # Frame rate
+    clock.tick(60)
