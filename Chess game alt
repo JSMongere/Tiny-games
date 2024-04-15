@@ -1,0 +1,21 @@
+import random
+
+# Define the pieces and their values
+pieces = ['pawn', 'knight', 'bishop', 'rook', 'queen', 'king']
+values = [1, 3, 3, 5, 9, 0]
+
+# Define the board as an 8x8 grid of None
+board = [[None] * 8 for _ in range(8)]
+
+# Place the pieces randomly on the board
+for i, piece in enumerate(pieces):
+    for _ in range(values[i]):
+        while True:
+            x, y = random.randint(0, 7), random.randint(0, 7)
+            if board[x][y] is None:
+                board[x][y] = piece
+                break
+
+# Print the board
+for row in board:
+    print(' '.join(row))
