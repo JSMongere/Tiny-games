@@ -1,0 +1,99 @@
+import random
+import curses
+
+# Define the game board size
+BOARD_SIZE = 4
+
+# Define the tile values
+TILES = {
+    2: '2',
+    4: '4',
+    8: '8',
+    16: '16',
+    32: '32',
+    64: '64',
+    128: '128',
+    256: '256',
+    512: '512',
+    1024: '1024',
+    2048: '2048'
+}
+
+# Define the direction vectors
+DIRECTIONS = {
+    'up': (-1, 0),
+    'down': (1, 0),
+    'left': (0, -1),
+    'right': (0, 1)
+}
+
+# Define the game screen
+def main(stdscr):
+    # Initialize the board
+    board = [[0 for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
+
+    # Place the initial tiles
+    board = add_random_tile(board)
+    board = add_random_tile(board)
+
+    # Initialize the score
+    score = 0
+
+    # Initialize the game state
+    game_over = False
+    last_move = None
+
+    # Initialize the curses window
+    curses.curs_set(0)
+    stdscr.nodelay(1)
+    stdscr.timeout(100)
+
+    # Main game loop
+    while not game_over:
+        # Clear the screen
+        stdscr.clear()
+
+        # Draw the board
+        draw_board(stdscr, board)
+
+        # Draw the score
+        draw_score(stdscr, score)
+
+        # Get the user input
+        key = stdscr.getch()
+
+        # Handle the user input
+        if key == curses.KEY_UP or key == ord('w'):
+            last_move = 'up'
+            board = move(board, 'up')
+            board = add_random_tile(board)
+            game_over = is_game_over(board)
+            score = calculate_score(board, score)
+        elif key == curses.KEY_DOWN or key == ord('s'):
+            last_move = 'down'
+            board = move(board, 'down')
+            board = add_random_tile(board)
+            game_over = is_game_over(board)
+            score = calculate_score(board, score)
+        elif key == curses.KEY_LEFT or key == ord('a'):
+            last_move = 'left'
+            board = move(board, 'left')
+            board = add_random_tile(board)
+            game_over = is_game_over(board)
+            score = calculate_score(board, score)
+        elif key == curses.KEY_RIGHT or key == ord('d'):
+            last_move = 'right'
+            board = move(board, 'right')
+            board = add_random_tile(board)
+            game_over = is_game_over(board)
+            score = calculate_score(board, score)
+
+    # Game over message
+    stdscr.addstr(BOARD_SIZE * 2 + 2, (BOARD_SIZE - len('Game Over!')) // 2, 'Game Over!', curses.A_BOLD)
+    stdscr.addstr(BOARD_SIZE * 2 + 4, (BOARD_SIZE - len('Press any key to exit...')) // 2, 'Press any key to exit...', curses.A_BOLD)
+    stdscr.getch()
+
+# Define the function to add a random tile to the board
+def add_random_tile(board):
+    # Find an empty cell
+    empty_cells = [(i, j) for i in```
