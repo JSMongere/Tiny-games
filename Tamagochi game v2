@@ -1,0 +1,94 @@
+import time
+import random
+
+class Tamagotchi:
+    def __init__(self, name):
+        self.name = name
+        self.energy = 100
+        self.food = 100
+        self.happiness = 100
+        self.cleanliness = 100
+        self.health = 100
+        self.alive = True
+        self.age = 0
+
+    def pass_time(self):
+        self.age += 1
+        self.energy -= 10
+        self.food -= 5
+        self.happiness -= 5
+        self.cleanliness -= 10
+
+        if self.energy < 10:
+            self.alive = False
+
+        if self.food < 0:
+            self.health -= 20
+            self.food = 0
+
+        if self.cleanliness < 0:
+            self.health -= 10
+            self.cleanliness = 0
+
+    def feed(self):
+        self.food += 30
+        self.cleanliness -= 10
+
+    def play(self):
+        self.happiness += 20
+        self.energy -= 10
+
+    def sleep(self):
+        self.energy += 30
+
+    def clean(self):
+        self.cleanliness += 30
+
+    def heal(self):
+        self.health += 30
+
+    def check_status(self):
+        print(f"Name: {self.name}")
+        print(f"Age: {self.age}")
+        print(f"Energy: {self.energy}")
+        print(f"Food: {self.food}")
+        print(f"Happiness: {self.happiness}")
+        print(f"Cleanliness: {self.cleanliness}")
+        print(f"Health: {self.health}")
+        print(f"Alive: {self.alive}\n")
+
+# Example usage
+my_tamagotchi = Tamagotchi("Pix")
+
+while my_tamagotchi.alive:
+    my_tamagotchi.pass_time()
+    if random.randint(0, 100) < 20:
+        print("Your Tamagotchi pooped!")
+        my_tamagotchi.clean()
+    if random.randint(0, 100) < 10:
+        print("Your Tamagotchi got sick!")
+        my_tamagotchi.heal()
+
+    print("What do you want to do?")
+    print("1. Feed")
+    print("2. Play")
+    print("3. Sleep")
+    print("4. Clean")
+    print("5. Check status")
+
+    choice = int(input("Enter the number of your choice: "))
+
+    if choice == 1:
+        my_tamagotchi.feed()
+    elif choice == 2:
+        my_tamagotchi.play()
+    elif choice == 3:
+        my_tamagotchi.sleep()
+    elif choice == 4:
+        my_tamagotchi.clean()
+    elif choice == 5:
+        my_tamagotchi.check_status()
+    else:
+        print("Invalid choice. Please choose a number between 1 and 5.")
+
+print("Your Tamagotchi has died.")
