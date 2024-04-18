@@ -1,0 +1,88 @@
+import pygame, sys
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+FPS = 60
+
+# Set up some colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+# Set up the game screen
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Fruit Ninja")
+clock = pygame.time.Clock()
+
+# Set up some variables
+fruits = ["apple", "banana", "orange"]
+fruit_images = []
+fruit_rects = []
+player_lives = 3
+score = 0
+
+# Load the fruit images
+for fruit in fruits:
+    fruit_images.append(pygame.image.load(f"images/{fruit}.png"))
+
+def generate_fruit():
+    fruit_index = random.randint(0, len(fruits) - 1)
+    fruit_image = fruit_images[fruit_index]
+    fruit_rect = fruit_image.get_rect()
+    fruit_rect.center = (random.randint(0, WIDTH), 0)
+    fruit_rects.append((fruit_image, fruit_rect))
+
+# Set up the main game loop
+running = True
+while running:
+    # Keep the loop running at the right speed
+    clock.tick(FPS)
+
+    # Process input (events)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Update the game state
+    for i, (fruit_image, fruit_rect) in enumerate(fruit_rects):
+        fruit_rect.y += 5
+        if fruit_rect.top > HEIGHT:
+            fruit_rects.pop(i)
+
+    if random.random() < 0.01:
+        generate_fruit()
+
+    # Draw everything
+    screen.fill(BLACK)
+    for fruit_image, fruit_rect in fruit_rects:
+        screen.blit(fruit_image, fruit_rect)
+
+    # Draw the score and lives
+    font = pygame.font.Font(None, 36)
+    score_text = font.render(f"Score: {score}", True, WHITE)
+    lives_text = font.render(f"Lives: {player_lives}", True, WHITE)
+    screen.blit(score_text, (10, 10))
+    screen.blit(lives_text, (WIDTH - 200, 10))
+
+    # Check for collisions
+    for i, (fruit_image, fruit_rect) in enumerate(fruit_rects):
+        if fruit_rect.colliderect(pygame.mouse.get_pos()):
+            fruit_rects.pop(i)
+            score += 1
+
+    # Check for game over
+    if player_lives <= 0:
+        running = False
+
+    # Flip the display
+    pygame.display.flip()
+
+# Quit Pygame
+pygame.quit()
+sys.exit()
