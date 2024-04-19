@@ -1,0 +1,85 @@
+import pygame
+import random
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+PIPE_GAP = 150
+PIPE_SPEED = 2
+GRAVITY = 1
+BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(f"bird{i}.png")) for i in range(1, 4)]
+PIPE_IMG = pygame.transform.scale2x(pygame.image.load("pipe.png"))
+BASE_IMG = pygame.transform.scale2x(pygame.image.load("base.png"))
+BACKGROUND_IMG = pygame.transform.scale2x(pygame.image.load("background.png"))
+
+# Set up some variables
+clock = pygame.time.Clock()
+game_active = False
+score = 0
+
+# Create some surfaces
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+base = screen.blit(BASE_IMG, (0, HEIGHT - 100))
+
+# Create a Bird class
+class Bird:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.vel = 0
+        self.height = self.y
+        self.img_count = 0
+        self.img = BIRD_IMGS[self.img_count]
+
+    def move(self):
+        self.vel += GRAVITY
+        self.y += self.vel
+        if self.y + self.img.get_height() >= HEIGHT - 100:
+            self.y = HEIGHT - 100 - self.img.get_height()
+
+    def draw(self):
+        self.img_count += 1
+        if self.img_count >= 2:
+            self.img_count = 0
+        self.img = BIRD_IMGS[self.img_count]
+        screen.blit(self.img, (self.x, self.y))
+
+# Create a Pipe class
+class Pipe:
+    def __init__(self, x):
+        self.x = x
+        self.height = 0
+        self.top = 0
+        self.bottom = 0
+        self.passed = False
+        self.vel = PIPE_SPEED
+        self.pipe_top = pygame.Rect(self.x, self.top, PIPE_IMG.get_width(), self.top)
+        self.pipe_bottom = pygame.Rect(self.x, self.bottom, PIPE_IMG.get_width(), HEIGHT - self.bottom - PIPE_GAP)
+
+    def move(self):
+        self.x -= self.vel
+        self.pipe_top = pygame.Rect(self.x, self.top, PIPE_IMG.get_width(), self.top)
+        self.pipe_bottom = pygame.Rect(self.x, self.bottom, PIPE_IMG.get_width(), HEIGHT - self.bottom - PIPE_GAP)
+
+    def draw(self):
+        screen.blit(PIPE_IMG, (self.x, self.top))
+        screen.blit(pygame.transform.flip(PIPE_IMG, False, True), (self.x, self.bottom))
+
+# Create a Base class
+class Base:
+    def __init__(self, x):
+        self.x = x
+        self.y = HEIGHT - 100
+        self.width = BASE_IMG.get_width()
+        self.img = BASE_IMG
+
+    def move(self):
+        self.x -= PIPE_SPEED
+        if self.x + self.width < 0:
+            self.x = WIDTH
+
+    def draw(self):
+        screen.blit(self.img, (self.x, self.y))
