@@ -1,0 +1,38 @@
+def display_options():
+    print("What would you like to do?\n")
+    print("1. Explore the forest")
+    print("2. Visit the river")
+    print("3. Climb the mountain")
+    print("4. Go back home")
+
+def explore_forest():
+    print("You explore the forest and find some interesting plants.")
+
+def visit_river():
+    print("You visit the river and see some fish swimming.")
+
+def climb_mountain():
+    print("You climb the mountain and reach the top for a beautiful view.")
+
+def go_home():
+    print("You go back home and rest.")
+
+def game():
+    location = None
+
+    while location != "home":
+        display_options()
+        location = input("Enter the number of your choice: ")
+
+        if location == "1":
+            explore_forest()
+        elif location == "2":
+            visit_river()
+        elif location == "3":
+            climb_mountain()
+        elif location == "4":
+            go_home()
+        else:
+            print("Invalid choice. Please try again.")
+
+game()
