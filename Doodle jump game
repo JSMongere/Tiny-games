@@ -1,0 +1,95 @@
+import sys
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+FLOOR = HEIGHT - 100
+GRAVITY = 1.5
+JUMP_VELOCITY = -15
+PLATFORM_WIDTH, PLATFORM_HEIGHT = 100, 20
+PLATFORM_GAP = 150
+PLATFORM_SPEED = 2
+
+# Set up some colors
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+# Create the game screen
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Create a list to store the platforms
+platforms = []
+
+# Create a function to add platforms
+def add_platform():
+    platform = pygame.Rect(WIDTH, random.randint(0, FLOOR - PLATFORM_HEIGHT), PLATFORM_WIDTH, PLATFORM_HEIGHT)
+    platforms.append(platform)
+
+# Create a function to draw the platforms
+def draw_platforms():
+    for platform in platforms:
+        pygame.draw.rect(screen, GREEN, platform)
+
+# Create a function to move the platforms
+def move_platforms():
+    for platform in platforms:
+        platform.x -= PLATFORM_SPEED
+        if platform.x < -PLATFORM_WIDTH:
+            platforms.pop(platforms.index(platform))
+            add_platform()
+
+# Create a function to check for collisions
+def check_collisions():
+    for platform in platforms:
+        if player.colliderect(platform):
+            return True
+    return False
+
+# Create a function to update the player's position
+def update_player():
+    global player_velocity
+    player_velocity += GRAVITY
+    player.y += player_velocity
+    if player.y > FLOOR:
+        player.y = FLOOR
+        player_velocity = 0
+
+# Create a function to draw the player
+def draw_player():
+    pygame.draw.rect(screen, RED, player)
+
+# Create a function to handle user input
+def handle_input():
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                player_velocity = JUMP_VELOCITY
+
+# Create the player
+player = pygame.Rect(50, FLOOR - 50, 50, 50)
+player_velocity = 0
+
+# Add the initial platforms
+add_platform()
+add_platform()
+
+# Game loop
+while True:
+    screen.fill(WHITE)
+    draw_platforms()
+    move_platforms()
+    handle_input()
+    update_player()
+    if check_collisions():
+        player_velocity = 0
+    draw_player()
+    pygame.display.flip()
