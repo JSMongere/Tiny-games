@@ -1,0 +1,50 @@
+class Tower:
+    def __init__(self, location, level=1):
+        self.location = location
+        self.level = level
+
+class Hero:
+    def __init__(self, mana=100):
+        self.mana = mana
+        self.towers = []
+
+    def build_tower(self, tower_type, location):
+        if self.mana >= 20:
+            self.mana -= 20
+            self.towers.append(Tower(location, tower_type))
+        else:
+            print("You don't have enough mana to build a tower.")
+
+hero = Hero()
+towerA = hero.build_tower('archer', 'A')
+towerB = hero.build_tower('archer', 'B')
+
+if hero.mana > 20:
+    if towerA.level > towerB.level:
+        hero.build_tower('archer', 'B')
+    elif towerB.level > towerA.level:
+        hero.build_tower('archer', 'A')
+
+class Tower:
+    def __init__(self, location, level=1):
+        self.location = location
+        self.level = level
+
+class Hero:
+    def __init__(self, mana=100):
+        self.mana = mana
+        self.towers = {}
+
+    def build_tower(self, tower_type, location):
+        if location in self.towers:
+            print("There is already a tower at that location.")
+            return
+        if self.mana >= 20:
+            self.mana -= 20
+            self.towers[location] = Tower(location, tower_type)
+        else:
+            print("You don't have enough mana to build a tower.")
+
+hero = Hero()
+hero.build_tower('archer', 'A')
+hero.build_tower('archer', 'A')
