@@ -1,0 +1,61 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the font
+font = pygame.font.Font(None, 36)
+
+# Set up the player
+player_x, player_y = 400, 300
+player_speed = 5
+
+# Set up the farm
+farm = [[0 for _ in range(10)] for _ in range(10)]
+
+# Game loop
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Get the current key presses
+    keys = pygame.key.get_pressed()
+
+    # Move the player
+    if keys[pygame.K_UP]:
+        player_y -= player_speed
+    if keys[pygame.K_DOWN]:
+        player_y += player_speed
+    if keys[pygame.K_LEFT]:
+        player_x -= player_speed
+    if keys[pygame.K_RIGHT]:
+        player_x += player_speed
+
+    # Ensure the player doesn't go off the screen
+    player_x = max(0, min(player_x, WIDTH))
+    player_y = max(0, min(player_y, HEIGHT))
+
+    # Draw everything
+    screen.fill(WHITE)
+    pygame.draw.rect(screen, BLACK, (player_x, player_y, 20, 20))
+    for y, row in enumerate(farm):
+        for x, cell in enumerate(row):
+            if cell == 1:
+                pygame.draw.rect(screen, (0, 255, 0), (x * 80, y * 80, 80, 80))
+
+    # Update the display
+    pygame.display.flip()
+
+    # Cap the frame rate
+    pygame.time.delay(1000 // 60)
