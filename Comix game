@@ -1,0 +1,37 @@
+pip install beautifulsoup4
+pip install requests
+
+import os, sys
+import requests as req
+from bs4 import BeautifulSoup
+
+def download_comic(comic_number):
+    url = 'https://xkcd.com/' + comic_number + '/'
+    print('Downloading comic from %s...' % url)
+    res = req.get(url)
+    soup = BeautifulSoup(res.text)
+    comic_img = soup.select('#comic img')[0]
+    comic_url = 'http:' + comic_img['src']
+    res = req.get(comic_url)
+
+    file_name = 'xkcd_comic_%s.png' % comic_number
+    image_file = open(os.path.join('xkcd_comics', file_name), 'wb')
+
+    for chunk in res.iter_content(100000):
+        image_file.write(chunk)
+
+    image_file.close()
+    print('Successfully downloaded comic %s' % comic_number)
+
+def main():
+    if len(sys.argv) < 2:
+        print('Usage: python comic_downloader.py [comic_number]')
+        sys.exit(1)
+
+    comic_number = sys.argv[1]
+    download_comic(comic_number)
+
+if __name__ == '__main__':
+    main()
+
+python comic_downloader.py 429
