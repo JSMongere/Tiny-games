@@ -1,0 +1,83 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH = 800
+HEIGHT = 600
+PLAYER_SIZE = 50
+OBSTACLE_SIZE = 50
+
+# Set up some colors
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+
+# Set up the player and obstacles
+player = pygame.Rect(WIDTH / 2, HEIGHT - PLAYER_SIZE, PLAYER_SIZE, PLAYER_SIZE)
+obstacles = []
+
+# Set up the clock
+clock = pygame.time.Clock()
+
+# Set up the game loop
+running = True
+while running:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                player.y -= 10
+            elif event.key == pygame.K_a:
+                player.x -= 10
+            elif event.key == pygame.K_d:
+                player.x += 10
+            elif event.key == pygame.K_r:
+                # Shoot a bullet
+                pass
+            elif event.key == pygame.K_SPACE:
+                # Activate shield
+                pass
+            elif event.key == pygame.K_q:
+                running = False
+
+    # Generate new obstacles
+    if random.randint(0, 100) < 5:
+        obstacle = pygame.Rect(random.randint(0, WIDTH - OBSTACLE_SIZE), 0, OBSTACLE_SIZE, OBSTACLE_SIZE)
+        obstacles.append(obstacle)
+
+    # Move the obstacles
+    for obstacle in obstacles:
+        obstacle.y += 5
+
+        # Check for collisions
+        if player.colliderect(obstacle):
+            running = False
+
+        # Remove obstacles that have moved off the screen
+        if obstacle.y > HEIGHT:
+            obstacles.remove(obstacle)
+
+    # Draw everything
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen.fill(WHITE)
+
+    # Draw the player
+    pygame.draw.rect(screen, GREEN, player)
+
+    # Draw the obstacles
+    for obstacle in obstacles:
+        pygame.draw.rect(screen, RED, obstacle)
+
+    # Update the display
+    pygame.display.flip()
+
+    # Cap the frame rate
+    clock.tick(60)
+
+# Quit Pygame
+pygame.quit()
