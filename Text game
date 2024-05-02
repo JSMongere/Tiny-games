@@ -1,0 +1,46 @@
+class Game:
+    def __init__(self):
+        self.current_room = None
+        self.rooms = {
+            "start": {
+                "description": "You are in the starting room. There is a door to the east.",
+                "exits": {"east": "room1"},
+            },
+            "room1": {
+                "description": "You are in room 1. There is a door to the west and a door to the east.",
+                "exits": {"west": "start", "east": "room2"},
+            },
+            "room2": {
+                "description": "You are in room 2. There is a door to the west.",
+                "exits": {"west": "room1"},
+            },
+        }
+
+    def describe_room(self):
+        print(self.current_room["description"])
+
+    def move(self, direction):
+        if direction in self.current_room["exits"]:
+            self.current_room = self.rooms[self.current_room["exits"][direction]]
+            self.describe_room()
+        else:
+            print("You can't go that way.")
+
+    def play(self):
+        self.current_room = self.rooms["start"]
+        self.describe_room()
+        while True:
+            action = input("What do you want to do? ").lower().split()
+            if len(action) == 0:
+                continue
+            if action[0] == "go":
+                self.move(action[1])
+            elif action[0] == "quit":
+                break
+            else:
+                print("I don't understand that command.")
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.play()
