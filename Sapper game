@@ -1,0 +1,72 @@
+import random
+
+class SapperGame:
+    def __init__(self, width=10, height=10, num_mines=10):
+        self.width = width
+        self.height = height
+        self.num_mines = num_mines
+        self.game_board = [[' ' for _ in range(width)] for _ in range(height)]
+        self.mine_positions = set()
+        self.revealed_board = [[' ' for _ in range(width)] for _ in range(height)]
+        self.flags = [[' ' for _ in range(width)] for _ in range(height)]
+
+        self.place_mines()
+        self.calculate_num_mines_around()
+
+    def place_mines(self):
+        while len(self.mine_positions) < self.num_mines:
+            x = random.randint(0, self.width - 1)
+            y = random.randint(0, self.height - 1)
+            self.mine_positions.add((x, y))
+
+    def calculate_num_mines_around(self):
+        for x in range(self.width):
+            for y in range(self.height):
+                if (x, y) not in self.mine_positions:
+                    num_mines_around = sum(1 for dx, dy in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)] if (x + dx, y + dy) in self.mine_positions)
+                    self.game_board[x][y] = str(num_mines_around) if num_mines_around > 0 else '.'
+
+    def reveal(self, x, y):
+        if self.revealed_board[x][y] != 'F':
+            self.revealed_board[x][y] = self.game_board[x][y]
+            if self.game_board[x][y] == '.':
+                for dx, dy in [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]:
+                    self.reveal(x + dx, y + dy)
+
+    def toggle_flag(self, x, y):
+        if self.revealed_board[x][y] == ' ':
+            if self.flags[x][y] == 'F':
+                self.flags[x][y] = ' '
+            else:
+                self.flags[x][y] = 'F'
+
+    def is_game_over(self):
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.mine_positions.__contains__((x, y)) and self.flags[x][y] != 'F':
+                    return False
+        return True
+
+    def display_board(self):
+        print("  ", end="")
+        for x in range(self.width):
+            print(x, end=" ")
+        print()
+        for y in range(self.height):
+            print(y, end=" ")
+            for x in range(self.width):
+                if self.revealed_board[x][y] == ' ':
+                    print(self.flags[x][y], end=" ")
+                else:
+                    print(self.revealed_board[x][y], end=" ")
+            print()
+
+def main():
+    game = SapperGame()
+    while True:
+        game.display_board()
+        x, y = map(int, input("Enter the coordinates to reveal or 'q' to quit: ").split())
+        if x == -1 and y == -1:
+            break
+        if x < 0 or x >= game.width or y < 0 or y >= game.height:
+            print("Invalid coordinates. Try again.")
