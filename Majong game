@@ -1,0 +1,50 @@
+import random
+
+class Tile:
+    def __init__(self, suit, number):
+        self.suit = suit
+        self.number = number
+
+    def __str__(self):
+        return f"{self.suit}{self.number}"
+
+class Wall:
+    def __init__(self):
+        self.tiles = []
+        self.build()
+
+    def build(self):
+        suits = ["B", "D", "C", "W"]
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9] * 4
+        numbers.extend([1, 2, 3, 4, 5, 6, 7, 8])
+        self.tiles = [Tile(suit, number) for suit, number in zip(suits * 14, numbers)]
+        random.shuffle(self.tiles)
+
+    def draw(self):
+        return self.tiles.pop()
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.hand = []
+
+    def draw(self, wall):
+        self.hand.append(wall.draw())
+
+    def __str__(self):
+        return f"{self.name}: {', '.join(str(tile) for tile in self.hand)}"
+
+def main():
+    wall = Wall()
+    players = [Player("Player 1"), Player("Player 2"), Player("Player 3"), Player("Player 4")]
+
+    for _ in range(14):
+        for player in players:
+            player.draw(wall)
+
+    print("Initial hands:")
+    for player in players:
+        print(player)
+
+if __name__ == "__main__":
+    main()
