@@ -1,0 +1,88 @@
+import random
+
+# Define the deck of cards
+suits = ['hearts', 'diamonds', 'clubs', 'spades']
+ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+deck = [(rank, suit) for rank in ranks for suit in suits]
+
+# Define the players
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.hand = []
+
+    def draw(self, deck):
+        self.hand.append(deck.pop())
+
+    def attack(self, table):
+        attack_card = self.hand.pop(0)
+        table.append(attack_card)
+        return attack_card
+
+    def defend(self, table, attack_card):
+        for card in self.hand:
+            if card[1] == attack_card[1] and ranks.index(card[0]) > ranks.index(attack_card[0]):
+                table.append(card)
+                self.hand.remove(card)
+                return True
+        return False
+
+    def contribute(self, table, attack_card):
+        for card in self.hand:
+            if card[0] == attack_card[0]:
+                table.append(card)
+                self.hand.remove(card)
+                return True
+        return False
+
+# Create the players
+player1 = Player('Player 1')
+player2 = Player('Player 2')
+
+# Shuffle the deck and deal cards to the players
+random.shuffle(deck)
+for i in range(6):
+    player1.draw(deck)
+    player2.draw(deck)
+
+# Define the game loop
+while len(deck) > 0 or len(player1.hand) > 0 or len(player2.hand) > 0:
+    # Player 1 attacks
+    attack_card = player1.attack([])
+    print(f'{player1.name} attacks with {attack_card}')
+
+    # Player 2 defends
+    if not player2.defend([attack_card], attack_card):
+        print(f'{player2.name} cannot defend and picks up the table')
+        player2.hand.extend([attack_card])
+    else:
+        print(f'{player2.name} defends with {player2.hand[-1]}')
+
+    # Player 2 contributes
+    if len(player2.hand) > 0:
+        if player2.contribute([attack_card], attack_card):
+            print(f'{player2.name} contributes with {player2.hand[-1]}')
+
+    # Player 2 attacks
+    attack_card = player2.attack([])
+    print(f'{player2.name} attacks with {attack_card}')
+
+    # Player 1 defends
+    if not player1.defend([attack_card], attack_card):
+        print(f'{player1.name} cannot defend and picks up the table')
+        player1.hand.extend([attack_card])
+    else:
+        print(f'{player1.name} defends with {player1.hand[-1]}')
+
+    # Player 1 contributes
+    if len(player1.hand) > 0:
+        if player1.contribute([attack_card], attack_card):
+            print(f'{player1.name} contributes with {player1.hand[-1]}')
+
+    # Draw cards if necessary
+    if len(player1.hand) < 6:
+        while len(player1.hand) < 6:
+            player1.draw(deck)
+    if len(player2.hand) < 6:
+        while len(player2.hand) < 6:
+            player2.draw(deck)
