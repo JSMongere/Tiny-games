@@ -1,0 +1,89 @@
+# Importing necessary modules
+import pygame
+import time
+
+# Initializing Pygame
+pygame.init()
+
+# Defining constants
+VER = "Beta 0.1.6.3"
+WIDTH, HEIGHT = 800, 600
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREY = (128, 128, 128)
+LIGHT_GREY = (224, 224, 224)
+LIGHT_BLUE = (173, 216, 230)
+BLUE = (0, 100, 250)
+
+# Creating display and caption
+game_display = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Clicky Clicks")
+
+# Defining functions
+def autominer():
+    global coins, autog
+    time.sleep(0.1)
+    coins += autog
+
+def draw_text(text, text_color, rect_color, x, y, fsize):
+    font = pygame.font.Font('freesansbold.ttf', fsize)
+    text = font.render(text, True, text_color, rect_color)
+    text_rect = text.get_rect()
+    text_rect.center = (x, y)
+    game_display.blit(text, text_rect)
+
+def rectangle(display, color, x, y, w, h):
+    pygame.draw.rect(display, color, (x, y, w, h))
+
+def main_loop():
+    global clock, autog, ver, coins
+    mong = 1
+    cost = 50
+    cost2 = 50
+    game_running = True
+    clock = pygame.time.Clock()
+    while game_running:
+        autominer()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game_running = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mopos = pygame.mouse.get_pos()
+                if 350 <= mopos[0] <= 450:
+                    coins += mong
+
+                if 600 <= mopos[0] <= 800:
+                    if coins >= cost:
+                        coins -= cost
+                        cost *= 1.5
+                        mong += 1
+                        cost = round(cost, 0)
+                        print(f'{cost:.2f}')
+
+                if 50 <= mopos[0] <= 245:
+                    if coins >= cost2:
+                        coins -= cost2
+                        cost2 *= 1.5
+                        autog += 0.4
+                        cost2 = round(cost2, 0)
+                        print(f'{cost2:.2f}')
+
+                if coins == 2147483647:
+                    print("You Beat the game")
+
+        # Drawing stuff
+        game_display.fill(WHITE)
+        draw_text("Clicky Clicks", BLACK, WHITE, 400, 100, 50)
+        draw_text(f"You have {coins:.2f} coins", BLACK, WHITE, 100, 50, 20)
+        draw_text("Upgrade 50*1.2", BLACK, WHITE, 700, 300, 20)
+        rectangle(game_display, LIGHT_GREY, 50, 400, 200, 300)
+        rectangle(game_display, BLACK, 350, 250, 100, 100)
+        rectangle(game_display, LIGHT_GREY, 600, 317, 200, 300)
+        pygame.display.update()
+        clock.tick(60)
+
+    pygame.quit()
+    quit()
+
+main_loop()
