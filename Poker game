@@ -1,0 +1,113 @@
+import random
+import asyncio
+from collections import Counter
+from dataclasses import dataclass
+from enum import Enum, auto
+
+class Suit(Enum):
+    SPADES = "♠"
+    HEARTS = "♥"
+    DIAMONDS = "♦"
+    CLUBS = "♣"
+
+class Rank(Enum):
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+    SEVEN = 7
+    EIGHT = 8
+    NINE = 9
+    TEN = 10
+    JACK = 11
+    QUEEN = 12
+    KING = 13
+    ACE = 14
+
+@dataclass
+class Card:
+    suit: Suit
+    rank: Rank
+
+    def __str__(self):
+        return f"{self.rank.name.capitalize()}{self.suit.value}"
+
+@dataclass
+class GameState:
+    deck: List[Card]
+    players: List[List[Card]]
+
+def create_deck() -> List[Card]:
+    return [Card(suit, rank) for suit in Suit for rank in Rank]
+
+async def shuffle_deck(deck: List[Card]) -> List[Card]:
+    await asyncio.sleep(0)  # simulating asynchronous behavior
+    random.shuffle(deck)
+    return deck
+
+async def deal_cards(game_state: GameState, num_cards: int) -> List[Card]:
+    new_cards = []
+    for _ in range(num_cards):
+        card = game_state.deck.pop()
+        new_cards.append(card)
+    return new_cards
+
+def rank_hand(hand: List[Card]) -> Tuple[int, List[int]]:
+    ranks = sorted([card.rank.value for card in hand], reverse=True)
+    suits = [card.suit for card in hand]
+    rank_counts = Counter(ranks)
+    is_flush = len(set(suits)) == 1
+    is_straight = len(set(ranks)) == 5 and max(ranks) - min(ranks) == 4
+
+    # Determine hand rank based on poker hand rankings
+    # ... (refer to the previous code snippets for the full rank_hand function)
+
+async def play_game(num_players: int):
+    game_state = GameState(deck=create_deck(), players=[[] for _ in range(num_players)])
+    await shuffle_deck(game_state.deck)
+
+    for i in range(num_players):
+        player_hand = await deal_cards(game_state, 5)
+        game_state.players[i] = player_hand
+
+    # Simulate user input for changing cards
+    discard_indices = []
+    for i, player_hand in enumerate(game_state.players):
+        print(f"Player {i + 1}'s hand: {', '.join(str(card) for card in player_hand)}")
+        discard_num = int(input("Enter the number of cards to discard (0-4): "))
+        while not (0 <= discard_num <= 4):
+            discard_num = int(input("Enter a valid number of cards to discard (0-4): "))
+        discard_indices.extend([random.randint(0, 4) for _ in range(discard_num)])
+
+    # Remove duplicates and sort the indices
+    discard_indices = sorted(list(set(discard_indices)))
+
+    # Change the cards
+    for i, player_hand in enumerate(game_state.players):
+        discard_indices_local = [index for index in discard_indices if index < len(player_hand)]
+        for index in discard_indices_local:
+            player_hand[index] = game_state.deck.pop()
+
+    # Draw new cards
+    for i, player_hand in enumerate(game_state.players):
+        new_cards = await deal_cards(game_state, len(discard_indices_local))
+        for j, card in enumerate(new_cards):
+            player_hand.insert(discard_indices_local[j], card)
+
+    # Evaluate hands
+    hand_ranks = [rank_hand(hand) for hand in game_state.players]
+    max_rank = max(hand_ranks)
+    winner_idx = hand_ranks.index(max_rank)
+
+    # Print final hands and winner
+    for i, player_hand in enumerate(game_state.players):
+        print(f"Player {i + 1}'s final hand: {', '.join(str(card) for card in player_hand)}")
+
+    print(f"Player {winner_idx + 1} wins with a {max_rank[0]}!")
+
+if __name__ == "__main__":
+    num_players = int(input("Enter the number of players (2-4): "))
+    while not (2 <= num_players <= 4):
+        num_players = int(input("Enter a valid number of players (2-4): "))
+    asyncio.run(play_game(num_players))
