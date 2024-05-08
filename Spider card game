@@ -1,0 +1,64 @@
+import random
+from typing import List, Tuple
+
+class Spider:
+    def __init__(self):
+        self.stock = [2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4]
+        self.waste = []
+        self.tableau = [[], [], [], [], [], [], [], []]
+        self.foundations = [[], [], []]
+
+    def pop_stock(self) -> int:
+        if self.stock:
+            return self.stock.pop()
+        else:
+            return None
+
+    def push_waste(self, card: int):
+        self.waste.append(card)
+
+    def pop_waste(self) -> int:
+        if self.waste:
+            return self.waste.pop()
+        else:
+            return None
+
+    def move_to_tableau(self, card: int, tableau_column: int):
+        if self.pop_waste() or self.pop_stock():
+            self.tableau[tableau_column].append(card)
+
+    def move_to_foundation(self, card: int, foundation_suit: int):
+        if self.tableau[card // 4][-1] == card and not self.foundations[foundation_suit]:
+            self.foundations[foundation_suit].append(card)
+
+    def is_game_over(self) -> bool:
+        for suit in range(3):
+            if not self.foundations[suit]:
+                return False
+        return True
+
+    def render(self):
+        print("Stock:", self.stock)
+        print("Waste:", self.waste)
+        print("Tableau:")
+        for i, column in enumerate(self.tableau):
+            print(f"{i}: {column}")
+        print("Foundations:")
+        for suit, foundation in enumerate(self.foundations):
+            print(f"{suit}: {foundation}")
+
+def main():
+    game = Spider()
+    while not game.is_game_over():
+        game.render()
+        user_input = input("Enter your move (column number or 'q' to quit): ")
+        if user_input.lower() == 'q':
+            break
+        try:
+            column_number = int(user_input)
+            game.move_to_tableau(game.pop_waste(), column_number)
+        except ValueError:
+            print("Invalid input. Please enter a column number or 'q' to quit.")
+
+if __name__ == "__main__":
+    main()
