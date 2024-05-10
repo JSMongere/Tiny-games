@@ -1,0 +1,70 @@
+class Animal:
+    def __init__(self, species=None, weight=None, age=None, name=None):
+        self.species = species.upper() if species else None
+        self.weight = float(weight) if weight else None
+        self.age = int(age) if age else None
+        self.name = name.upper() if name else None
+
+    def setSpecies(self, species):
+        self.species = species.upper()
+
+    def setWeight(self, weight):
+        self.weight = float(weight)
+
+    def setAge(self, age):
+        self.age = int(age)
+
+    def setName(self, name):
+        self.name = name.upper()
+
+    def toString(self):
+        return f'Species: {self.species}, Name: {self.name}, Age: {self.age}, Weight: {self.weight:.1f}'
+
+class AnimalShelter:
+    def __init__(self):
+        self.AnimalDictionary = {}
+
+    def addAnimal(self, animal):
+        if animal is None or animal.species is None:
+            return False
+        species = animal.species.upper()
+        if species in self.AnimalDictionary:
+            self.AnimalDictionary[species].append(animal)
+        else:
+            self.AnimalDictionary[species] = [animal]
+        return True
+
+    def removeAnimal(self, animal):
+        if animal is None or animal.species is None:
+            return False
+        species = animal.species.upper()
+        if species in self.AnimalDictionary:
+            if animal in self.AnimalDictionary[species]:
+                self.AnimalDictionary[species].remove(animal)
+                return True
+        return False
+
+    def doesAnimalExist(self, animal):
+        if animal is None or animal.species is None:
+            return False
+        species = animal.species.upper()
+        if species in self.AnimalDictionary:
+            return animal in self.AnimalDictionary[species]
+        return False
+
+    def GetSpecies(self, species):
+        if species is None:
+            return None
+        species = species.upper()
+        if species in self.AnimalDictionary:
+            return '\n'.join([animal.toString() for animal in self.AnimalDictionary[species]])
+        return None
+
+    def removeSpecies(self, species):
+        if species is None:
+            return False
+        species = species.upper()
+        if species in self.AnimalDictionary:
+            del self.AnimalDictionary[species]
+            return True
+        return False
