@@ -1,0 +1,196 @@
+# Cooking Game
+
+# Menu options
+drinks = ["Soda", "Tea", "Coffee", "Water"]
+meals = ["Spaghetti and Meatballs", "Steak and Roasted Vegetables", "Burger and Fries", "Grilled Cheese"]
+desserts = ["Cake", "Ice Cream", "Fruit Salad", "Brownies"]
+
+# Prices
+prices = [1.50, 1.00, 2.00, 0.50, 10.00, 15.00, 12.00, 8.00, 5.00, 3.00, 4.00, 2.50]
+
+# Initialize money
+money = 20.00
+
+# Game loop
+while True:
+    # Display menu
+    print("Welcome to the Cooking Game!")
+    print("You have ${:.2f}.".format(money))
+    print("What would you like to order?")
+    print("1. Drinks")
+    print("2. Meals")
+    print("3. Desserts")
+    print("4. Exit")
+
+    # Get user choice
+    choice = int(input("Enter your choice: "))
+
+    # Handle drink choice
+    if choice == 1:
+        print("Drinks:")
+        for i, drink in enumerate(drinks):
+            print("{}: ${:.2f}".format(i+1, prices[i]))
+        drinkChoice = int(input("Enter your drink choice: "))
+        if drinkChoice == 1:
+            money -= prices[0]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[0], money))
+        elif drinkChoice == 2:
+            money -= prices[1]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[1], money))
+        elif drinkChoice == 3:
+            money -= prices[2]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[2], money))
+        elif drinkChoice == 4:
+            money -= prices[3]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[3], money))
+        else:
+            print("Sorry, that's not a valid choice.")
+
+    # Handle meal choice
+    elif choice == 2:
+        print("Meals:")
+        for i, meal in enumerate(meals):
+            print("{}: ${:.2f}".format(i+1, prices[i+4]))
+        mealChoice = int(input("Enter your meal choice: "))
+        if mealChoice == 1:
+            money -= prices[4]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[0], money))
+        elif mealChoice == 2:
+            money -= prices[5]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[1], money))
+        elif mealChoice == 3:
+            money -= prices[6]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[2], money))
+        elif mealChoice == 4:
+            money -= prices[7]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[3], money))
+        else:
+            print("Sorry, that's not a valid choice.")
+
+    # Handle dessert choice
+    elif choice == 3:
+        print("Desserts:")
+        for i, dessert in enumerate(desserts):
+            print("{}: ${:.2f}".format(i+1, prices[i+8]))
+        dessertChoice = int(input("Enter your dessert choice: "))
+        if dessertChoice == 1:
+            money -= prices[8]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[0], money))
+        elif dessertChoice == 2:
+            money -= prices[9]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[1], money))
+        elif dessertChoice == 3:
+            money -= prices[10]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[2], money))
+        elif dessertChoice == 4:
+            money -= prices[11]
+            print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[3], money))
+        else:
+            print("Sorry, that's not a valid choice.")
+
+    # Exit game
+    elif choice == 4:
+        print("Thank you for playing the cafe game!")
+        exit()
+
+    # Handle invalid choice
+    else:
+        print("Sorry, that's not a valid choice.")
+\end{code}
+
+You can improve the code by creating functions for different operations like taking orders, updating remaining money, etc. Here's a more efficient and organized version of the code:
+
+```python
+def display_menu():
+    print("You have ${:.2f}.".format(money))
+    print("What would you like to order?")
+    print("1. Drinks")
+    print("2. Meals")
+    print("3. Desserts")
+    print("4. Exit")
+
+def get_user_choice():
+    choice = int(input("Enter your choice: "))
+    return choice
+
+def order_drinks(choice):
+    global money
+    if choice == 1:
+        money -= prices[0]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[0], money))
+    elif choice == 2:
+        money -= prices[1]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[1], money))
+    elif choice == 3:
+        money -= prices[2]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[2], money))
+    elif choice == 4:
+        money -= prices[3]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(drinks[3], money))
+    else:
+        print("Sorry, that's not a valid choice.")
+
+def order_meals(choice):
+    global money
+    if choice == 1:
+        money -= prices[4]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[0], money))
+    elif choice == 2:
+        money -= prices[5]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[1], money))
+    elif choice == 3:
+        money -= prices[6]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[2], money))
+    elif choice == 4:
+        money -= prices[7]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(meals[3], money))
+    else:
+        print("Sorry, that's not a valid choice.")
+
+def order_desserts(choice):
+    global money
+    if choice == 1:
+        money -= prices[8]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[0], money))
+    elif choice == 2:
+        money -= prices[9]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[1], money))
+    elif choice == 3:
+        money -= prices[10]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[2], money))
+    elif choice == 4:
+        money -= prices[11]
+        print("One {} coming right up! You have ${:.2f} remaining.\n".format(desserts[3], money))
+    else:
+        print("Sorry, that's not a valid choice.")
+
+def exit_game():
+    print("Thank you for playing the cafe game!")
+    exit()
+
+# Main game loop
+while True:
+    display_menu()
+    choice = get_user_choice()
+    if choice == 1:
+        print("Drinks:")
+        for i, drink in enumerate(drinks):
+            print("{}: ${:.2f}".format(i+1, prices[i]))
+        drink_choice = int(input("Enter your drink choice: "))
+        order_drinks(drink_choice)
+    elif choice == 2:
+        print("Meals:")
+        for i, meal in enumerate(meals):
+            print("{}: ${:.2f}".format(i+1, prices[i+4]))
+        meal_choice = int(input("Enter your meal choice: "))
+        order_meals(meal_choice)
+    elif choice == 3:
+        print("Desserts:")
+        for i, dessert in enumerate(desserts):
+            print("{}: ${:.2f}".format(i+1, prices[i+8]))
+        dessert_choice = int(input("Enter your dessert choice: "))
+        order_desserts(dessert_choice)
+    elif choice == 4:
+        exit_game()
+    else:
+        print("Sorry, that's not a valid choice.")
