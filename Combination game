@@ -1,0 +1,27 @@
+import random
+
+def generate_combination(length):
+    """Generate a random combination of given length."""
+    return ''.join(random.sample('0123456789', length))
+
+def play_game():
+    """Play the combination game."""
+    difficulty = input("Choose a difficulty level (easy, medium, hard): ")
+    length = {'easy': 3, 'medium': 4, 'hard': 5}[difficulty]
+    target_combination = generate_combination(length)
+    guesses = 10
+
+    print(f"Try to guess the combination of {length} digits. You have {guesses} guesses.")
+
+    while guesses > 0:
+        guess = input("Enter your guess: ")
+        if guess == target_combination:
+            print("Congratulations! You guessed the combination!")
+            return
+        guesses -= 1
+        print(f"Wrong guess. You have {guesses} guesses left.")
+
+    print("Game over. You didn't guess the combination.")
+
+if __name__ == "__main__":
+    play_game()
