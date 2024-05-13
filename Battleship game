@@ -1,0 +1,66 @@
+import random
+
+def print_board(board):
+    # Show the board, one row at a time
+    for row in board:
+        print(row)
+
+def ask_user_for_board_position():
+    column = input("column (A to E):")
+
+    if column not in "ABCDE":
+        print("That column is wrong! It should be A, B, C, D or E")
+
+    row = input("row (1 to 5):")
+
+    if row not in "12345":
+        print("That row is wrong! it should be 1, 2, 3, 4 or 5")
+
+    return int(row) - 1, letters_to_numbers[column]
+
+def place_battleship(board):
+    for n in range(5):
+        print("Where do you want ship ", n + 1, "?")
+        column = input("column (A to E):")
+        row = input("row (1 to 5):")
+        row_number, column_number = ask_user_for_board_position()
+
+        if board[row_number][column_number] == 'X':
+            print("That spot already has a battleship in it!")
+
+        board[row_number][column_number] = 'X'
+
+def play_game():
+    board = [
+        [' ' for _ in range(5)] for _ in range(5)
+    ]
+
+    place_battleship(board)
+
+    guesses = 0
+    while guesses < 5:
+        print_board(board)
+        print("Guess a battleship location")
+        row_number, column_number = ask_user_for_board_position()
+
+        if board[row_number][column_number] == 'X':
+            print("Hit!")
+            board[row_number][column_number] = 'H'
+        else:
+            print("Miss!")
+            board[row_number][column_number] = 'M'
+
+        guesses += 1
+
+    print_board(board)
+
+if __name__ == "__main__":
+    letters_to_numbers = {
+        'A': 0,
+        'B': 1,
+        'C': 2,
+        'D': 3,
+        'E': 4,
+    }
+
+    play_game()
