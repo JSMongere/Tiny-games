@@ -1,0 +1,66 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+WHITE = (255, 255, 255)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the player
+player = pygame.Rect(WIDTH / 2, HEIGHT / 2, 50, 50)
+player_speed = 5
+
+# Set up the loot
+loot = pygame.Rect(random.randint(0, WIDTH - 50), random.randint(0, HEIGHT - 50), 50, 50)
+loot_speed = 3
+
+# Set up the score
+score = 0
+
+# Set up the clock
+clock = pygame.time.Clock()
+
+# Game loop
+running = True
+while running:
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Player movement
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        player.x -= player_speed
+    if keys[pygame.K_RIGHT]:
+        player.x += player_speed
+    if keys[pygame.K_UP]:
+        player.y -= player_speed
+    if keys[pygame.K_DOWN]:
+        player.y += player_speed
+
+    # Loot movement
+    loot.x += random.choice([-loot_speed, loot_speed])
+    loot.y += random.choice([-loot_speed, loot_speed])
+
+    # Collision detection
+    if player.colliderect(loot):
+        score += 1
+        loot = pygame.Rect(random.randint(0, WIDTH - 50), random.randint(0, HEIGHT - 50), 50, 50)
+
+    # Draw everything
+    screen.fill(WHITE)
+    pygame.draw.rect(screen, (0, 255, 0), player)
+    pygame.draw.rect(screen, (255, 0, 0), loot)
+    pygame.display.flip()
+
+    # Limit the frame rate
+    clock.tick(60)
+
+# Quit Pygame
+pygame.quit()
