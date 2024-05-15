@@ -1,0 +1,86 @@
+class Game:
+    def __init__(self):
+        self.story = {
+            "start": {
+                "text": "You are in a dark forest. There are two paths in front of you. One leads to the mountains, the other to the beach.",
+                "options": {
+                    "Go to the mountains": self.mountains,
+                    "Go to the beach": self.beach
+                }
+            },
+            "mountains": {
+                "text": "You are in the mountains. It's cold and windy. You see a cave in front of you.",
+                "options": {
+                    "Enter the cave": self.cave,
+                    "Go back": self.start
+                }
+            },
+            "beach": {
+                "text": "You are at the beach. It's warm and sunny. You see a boat tied to a dock.",
+                "options": {
+                    "Take the boat": self.boat,
+                    "Stay at the beach": self.beach
+                }
+            },
+            "cave": {
+                "text": "You are in the cave. It's dark and scary. You see a treasure chest in front of you.",
+                "options": {
+                    "Open the chest": self.chest,
+                    "Leave the cave": self.mountains
+                }
+            },
+            "chest": {
+                "text": "You opened the chest and found a golden crown! Congratulations, you won!",
+                "options": {
+                    "Play again": self.start
+                }
+            },
+            "boat": {
+                "text": "You took the boat and sailed away. You found a deserted island and lived there happily ever after!",
+                "options": {
+                    "Play again": self.start
+                }
+            }
+        }
+
+    def start(self):
+        current_scene = self.story["start"]
+        self.display_text(current_scene["text"])
+        self.display_options(current_scene["options"])
+
+    def display_text(self, text):
+        print(text)
+
+    def display_options(self, options):
+        for option in options:
+            print(f"{option}: {options[option]}")
+
+    def mountains(self):
+        current_scene = self.story["mountains"]
+        self.display_text(current_scene["text"])
+        self.display_options(current_scene["options"])
+
+    def beach(self):
+        current_scene = self.story["beach"]
+        self.display_text(current_scene["text"])
+        self.display_options(current_scene["options"])
+
+    def cave(self):
+        current_scene = self.story["cave"]
+        self.display_text(current_scene["text"])
+        self.display_options(current_scene["options"])
+
+    def chest(self):
+        current_scene = self.story["chest"]
+        self.display_text(current_scene["text"])
+        self.display_options(current_scene["options"])
+
+    def boat(self):
+        current_scene = self.story["boat"]
+        self.display_text(current_scene["text"])
+        self.display_options(current_scene["options"])
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.start()
