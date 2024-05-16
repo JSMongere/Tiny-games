@@ -1,0 +1,82 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 640, 480
+CAT_SIZE = 32
+BARRIER_SIZE = 32
+
+# Set up some colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the cat class
+class Cat(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pygame.Surface((CAT_SIZE, CAT_SIZE))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (WIDTH / 2, HEIGHT / 2)
+        self.direction = 'north'
+
+    def move(self, direction, barriers):
+        if direction == 'north':
+            self.rect.y -= CAT_SIZE
+        elif direction == 'outh':
+            self.rect.y += CAT_SIZE
+        elif direction == 'east':
+            self.rect.x += CAT_SIZE
+        elif direction == 'west':
+            self.rect.x -= CAT_SIZE
+
+        if self.rect.collidelistall(barriers)!= -1:
+            return False
+        return True
+
+# Set up the barrier class
+class Barrier(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((BARRIER_SIZE, BARRIER_SIZE))
+        self.image.fill(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+
+# Set up the game
+barriers = [Barrier(100, 100), Barrier(200, 200), Barrier(300, 300)]
+cat = Cat()
+
+# Game loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                cat.direction = 'north'
+            elif event.key == pygame.K_DOWN:
+                cat.direction = 'outh'
+            elif event.key == pygame.K_LEFT:
+                cat.direction = 'west'
+            elif event.key == pygame.K_RIGHT:
+                cat.direction = 'east'
+
+    if not cat.move(cat.direction, [barrier.rect for barrier in barriers]):
+        print("Game Over")
+        running = False
+
+    screen.fill(WHITE)
+    screen.blit(cat.image, cat.rect)
+    for barrier in barriers:
+        screen.blit(barrier.image, barrier.rect)
+    pygame.display.flip()
+
+pygame.quit()
