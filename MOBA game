@@ -1,0 +1,40 @@
+class Character:
+    def __init__(self, name, health, attack):
+        self.name = name
+        self.health = health
+        self.attack = attack
+
+    def is_alive(self):
+        return self.health > 0
+
+class Hero(Character):
+    def __init__(self, name, health, attack, ability):
+        super().__init__(name, health, attack)
+        self.ability = ability
+
+    def use_ability(self, enemy):
+        enemy.health -= self.ability
+        print(f"{self.name} used {self.ability} on {enemy.name}!")
+
+class Minion(Character):
+    def __init__(self, name, health, attack):
+        super().__init__(name, health, attack)
+
+    def attack_enemy(self, enemy):
+        enemy.health -= self.attack
+        print(f"{self.name} attacked {enemy.name}!")
+
+hero1 = Hero("Hero1", 100, 10, 20)
+hero2 = Hero("Hero2", 120, 8, 30)
+minion1 = Minion("Minion1", 50, 5)
+minion2 = Minion("Minion2", 60, 4)
+
+def game_loop():
+    while hero1.is_alive() and hero2.is_alive():
+        hero1.use_ability(hero2)
+        hero2.use_ability(hero1)
+        minion1.attack_enemy(hero2)
+        minion2.attack_enemy(hero1)
+        print(f"{hero1.name}: {hero1.health} HP, {hero2.name}: {hero2.health} HP")
+
+game_loop()
