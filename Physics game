@@ -1,0 +1,25 @@
+from perfect_physics import World, Circle, Wall
+
+# Set up circles and walls
+circle_list = [Circle(x=1, y=0, r=1, vx=1, vy=0, m=1)]
+for i in range(1, 6):
+    circle_list.append(Circle(x=i * 2 + 4, y=0, r=1, vx=0, vy=0, m=1))
+wall_list = [Wall(x0=0, y0=0, x1=0, y1=1), Wall(x0=20, y0=0, x1=20, y1=1)]
+world = World(circle_list, wall_list, xlim=(-1, 21), ylim=(-2, 2))
+
+# Show the initial state of the world
+world.show()
+
+# Game loop
+while True:
+    # Find the exact time span in which the next collision occurs
+    next_collision_time = world.find_next_collision_time()
+
+    # Move forward to exactly that time
+    world.move_forward(next_collision_time)
+
+    # Adjust the speeds of the colliding objects
+    world.resolve_collision()
+
+    # Show the updated state of the world
+    world.show()
