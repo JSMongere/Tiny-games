@@ -1,0 +1,67 @@
+import pygame
+import random
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Constants
+WIDTH, HEIGHT = 800, 600
+FPS = 60
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+GRAY = (169, 169, 169)
+ORANGE = (255, 165, 0)
+LIGHT_BLUE = (173, 216, 230)  # Light blue color for the level indicator
+SHIP_GREEN = (0, 255, 0)  # Green color for the ship
+GRASS_GREEN = (0, 100, 0)  # Darker green color for the grass
+STAR_COUNT = int(WIDTH * HEIGHT * 0.001)
+
+# Load spaceship and cow images
+ovni = pygame.image.load("ovni.png")
+cow = pygame.image.load("cow.png")
+
+# Resize images if needed
+ovni = pygame.transform.scale(ovni, (50, 50))
+cow = pygame.transform.scale(cow, (40, 40))
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("UFO Simulator")
+
+# Set up the clock
+clock = pygame.time.Clock()
+
+# Set up the UFO and cow positions
+ufo_x, ufo_y = WIDTH // 2, HEIGHT // 2
+cow_x, cow_y = random.randint(0, WIDTH - 40), random.randint(0, HEIGHT - 40)
+
+# Game loop
+while True:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Move the UFO
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        ufo_y -= 5
+    if keys[pygame.K_DOWN]:
+        ufo_y += 5
+    if keys[pygame.K_LEFT]:
+        ufo_x -= 5
+    if keys[pygame.K_RIGHT]:
+        ufo_x += 5
+
+    # Draw everything
+    screen.fill(BLACK)
+    screen.blit(ovni, (ufo_x, ufo_y))
+    screen.blit(cow, (cow_x, cow_y))
+
+    # Update the display
+    pygame.display.flip()
+    clock.tick(FPS)
