@@ -1,0 +1,59 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+SAND_COLOR = (194, 164, 113)
+WATER_COLOR = (0, 0, 255)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the clock
+clock = pygame.time.Clock()
+
+# Set up the sand and water particles
+sand_particles = []
+water_particles = []
+
+# Game loop
+running = True
+while running:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # Create a new sand particle at the mouse position
+            sand_particles.append([event.pos[0], event.pos[1]])
+
+    # Move the sand particles
+    for i, particle in enumerate(sand_particles):
+        particle[1] += 1
+        if particle[1] > HEIGHT:
+            sand_particles.pop(i)
+
+    # Move the water particles
+    for i, particle in enumerate(water_particles):
+        particle[1] += 1
+        if particle[1] > HEIGHT:
+            water_particles.pop(i)
+
+    # Draw everything
+    screen.fill((255, 255, 255))
+    for particle in sand_particles:
+        pygame.draw.rect(screen, SAND_COLOR, (particle[0], particle[1], 2, 2))
+    for particle in water_particles:
+        pygame.draw.rect(screen, WATER_COLOR, (particle[0], particle[1], 2, 2))
+
+    # Update the display
+    pygame.display.flip()
+
+    # Cap the frame rate
+    clock.tick(60)
+
+# Quit Pygame
+pygame.quit()
