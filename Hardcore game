@@ -1,0 +1,132 @@
+import random
+
+def intro():
+    print("Welcome to the hardcore game!")
+    print("You are trapped in a room and need to find the code to escape.")
+    print("The code is hidden in three digits, and you need to find them in the correct order.")
+
+def menu(items, question):
+    for i, item in enumerate(items, 1):
+        print(f"{i}. {item}")
+    while True:
+        try:
+            choice = int(input(question))
+            if 1 <= choice <= len(items):
+                return choice
+            else:
+                print("Selection must be whole number between 1-9:")
+        except:
+            print("Selection must be whole number between 1-9:")
+
+def Door(code):
+    print("You walk to the door. The rotary padlock contains three digits. You enter a code")
+    while True:
+        print("You find no code.")
+        print("")
+        result = input("Enter the code: ")
+        if result == code:
+            print("Congratulations! You escaped the room!")
+            return 1
+        else:
+            print("Incorrect code. Try again!")
+
+def Window(choice, code1Location, codeSegment1):
+    print("You examine the window.")
+    if choice == code1Location:
+        print(f"You find a note with the code segment: {codeSegment1}")
+    else:
+        print("You find nothing.")
+
+def Backpack(choice, code1Location, codeSegment1):
+    print("You examine the backpack.")
+    if choice == code1Location:
+        print(f"You find a note with the code segment: {codeSegment1}")
+    else:
+        print("You find nothing.")
+
+def Vase(choice, code1Location, codeSegment1):
+    print("You examine the vase.")
+    if choice == code1Location:
+        print(f"You find a note with the code segment: {codeSegment1}")
+    else:
+        print("You find nothing.")
+
+def Bucket(choice, code2Location, codeSegment2):
+    print("You examine the bucket.")
+    if choice == code2Location:
+        print(f"You find a note with the code segment: {codeSegment2}")
+    else:
+        print("You find nothing.")
+
+def Painting(choice, code2Location, codeSegment2):
+    print("You examine the painting.")
+    if choice == code2Location:
+        print(f"You find a note with the code segment: {codeSegment2}")
+    else:
+        print("You find nothing.")
+
+def JewelryBox(choice, code2Location, codeSegment2):
+    print("You examine the jewelry box.")
+    if choice == code2Location:
+        print(f"You find a note with the code segment: {codeSegment2}")
+    else:
+        print("You find nothing.")
+
+def Rug(choice, code3Location, codeSegment3):
+    print("You examine the rug.")
+    if choice == code3Location:
+        print(f"You find a note with the code segment: {codeSegment3}")
+    else:
+        print("You find nothing.")
+
+def Mirror(choice, code3Location, codeSegment3):
+    print("You examine the mirror.")
+    if choice == code3Location:
+        print(f"You find a note with the code segment: {codeSegment3}")
+    else:
+        print("You find nothing.")
+
+def Bookshelf(choice, code3Location, codeSegment3):
+    print("You examine the bookshelf.")
+    if choice == code3Location:
+        print(f"You find a note with the code segment: {codeSegment3}")
+    else:
+        print("You find nothing.")
+
+def main():
+    intro()
+    codeSegment1 = random.randint(0, 9)
+    codeSegment2 = random.randint(0, 9)
+    codeSegment3 = random.randint(0, 9)
+    code = f"{codeSegment1}{codeSegment2}{codeSegment3}"
+    items = ["Window", "Backpack", "Vase", "Bucket", "Painting", "JewelryBox", "Rug", "Mirror", "Bookshelf"]
+    code1Location = random.randint(1, 3)
+    code2Location = random.randint(4, 6)
+    code3Location = random.randint(7, 9)
+    while True:
+        choice = menu(items, "What do you want to inspect? ")
+        if choice == 1:
+            Window(choice, code1Location, codeSegment1)
+        elif choice == 2:
+            Backpack(choice, code1Location, codeSegment1)
+        elif choice == 3:
+            Vase(choice, code1Location, codeSegment1)
+        elif choice == 4:
+            Bucket(choice, code2Location, codeSegment2)
+        elif choice == 5:
+            Painting(choice, code2Location, codeSegment2)
+        elif choice == 6:
+            JewelryBox(choice, code2Location, codeSegment2)
+        elif choice == 7:
+Rug(choice, code3Location, codeSegment3)
+        elif choice == 8:
+            Mirror(choice, code3Location, codeSegment3)
+        elif choice == 9:
+            Bookshelf(choice, code3Location, codeSegment3)
+        else:
+            print("Invalid selection.")
+        if Door(code) == 1:
+            break
+
+if __name__ == "__main__":
+    main()
