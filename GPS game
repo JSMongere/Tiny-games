@@ -1,0 +1,40 @@
+import random
+
+class GPSGame:
+    def __init__(self):
+        self.player_lat = 0.0
+        self.player_long = 0.0
+        self.target_lat = random.uniform(-90.0, 90.0)
+        self.target_long = random.uniform(-180.0, 180.0)
+
+    def get_distance(self, lat1, long1, lat2, long2):
+        # Simple distance calculation (not accurate for real GPS coordinates)
+        return ((lat2 - lat1) ** 2 + (long2 - long1) ** 2) ** 0.5
+
+    def move(self, direction):
+        if direction == 'n':
+            self.player_lat += 1.0
+        elif direction == '':
+            self.player_lat -= 1.0
+        elif direction == 'e':
+            self.player_long += 1.0
+        elif direction == 'w':
+            self.player_long -= 1.0
+        else:
+            print("Invalid direction. Please enter 'n', '', 'e', or 'w'.")
+
+    def play(self):
+        while True:
+            distance = self.get_distance(self.player_lat, self.player_long, self.target_lat, self.target_long)
+            print(f"Your current location: ({self.player_lat}, {self.player_long})")
+            print(f"Target location: ({self.target_lat}, {self.target_long})")
+            print(f"Distance to target: {distance:.2f} units")
+            if distance < 1.0:
+                print("Congratulations! You've reached the target location.")
+                break
+            direction = input("Enter a direction (n, s, e, w): ")
+            self.move(direction)
+
+if __name__ == "__main__":
+    game = GPSGame()
+    game.play()
