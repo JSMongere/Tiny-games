@@ -1,0 +1,145 @@
+import pygame
+import random
+
+pygame.init()
+
+WIDTH, HEIGHT = 600, 500
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+balloonPath = "balloon.png"
+archerPath = "archer.png"
+arrowPath = "arrow.png"
+font = pygame.font.Font('freesansbold.ttf', 20)
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Balloon Archer")
+clock = pygame.time.Clock()
+FPS = 30
+
+class Archer:
+    def __init__(self, width, height, speed):
+        self.width = width
+        self.height = height
+        self.speed = speed
+        self.archer = pygame.transform.scale(pygame.image.load(archerPath), (self.width, self.height))
+        self.archerRect = self.archer.get_rect()
+        self.archerRect.x, self.archerRect.y = 100, HEIGHT // 2
+
+    def display(self):
+        screen.blit(self.archer, self.archerRect)
+
+    def update(self, xFac, yFac):
+        self.archerRect.x += xFac * self.speed
+        self.archerRect.y += yFac * self.speed
+
+        if self.archerRect.x <= 0:
+            self.archerRect.x = 0
+        elif self.archerRect.x >= WIDTH // 2 - self.archerRect.w:
+            self.archerRect.x = WIDTH // 2 - self.archerRect.w
+
+        if self.archerRect.y <= 0:
+            self.archerRect.y = 0
+        elif self.archerRect.y >= HEIGHT - self.archerRect.h:
+            self.archerRect.y = HEIGHT - self.archerRect.h
+
+class Balloon:
+    def __init__(self, posx, posy, width, height, speed):
+        self.width, self.height = width, height
+        self.speed = speed
+        self.balloonImg = pygame.image.load(balloonPath)
+        self.balloon = pygame.transform.scale(self.balloonImg, (self.width, self.height))
+        self.balloonRect = self.balloon.get_rect()
+        self.balloonRect.x, self.balloonRect.y = posx, posy
+
+    def display(self):
+        screen.blit(self.balloon, self.balloonRect)
+
+    def update(self):
+        self.balloonRect.y -= self.speed
+
+        if self.balloonRect.y < 0:
+            self.balloonRect.y = HEIGHT + 10
+
+class Arrow:
+    def __init__(self, posx, posy, width, height, speed):
+        self.width, self.height = width, height
+        self.speed = speed
+        self.hit = 0
+        self.arrow = pygame.transform.scale(pygame.image.load(arrowPath), (width, height))
+        self.arrowRect = self.arrow.get_rect()
+        self.arrowRect.x, self.arrowRect.y = posx, posy
+
+    def display(self):
+        screen.blit(self.arrow, self.arrowRect)
+
+    def update(self):
+        self.arrowRect.x += self.speed
+
+    def updateHit(self):
+        self.hit = 1
+
+    def getHit(self):
+        return self.hit
+
+def populateBalloons(bWidth, bHeight, bSpeed, bCount):
+    listOfBalloons = []
+    for _ in range(bCount):
+        listOfBalloons.append(Balloon(random.randint(WIDTH // 2, WIDTH - bWidth), random.randint(0, HEIGHT- bHeight), bWidth, bHeight, bSpeed))
+    return listOfBalloons
+
+def main():
+    archer = Archer(100, 150, 5)
+    listOfBalloons = populateBalloons(100, 100, 2, 10)
+    arrow = Arrow(archer.archerRect.x + archer.archerRect.w // 2, archer.archerRect.y + archer.archerRect.h // 2, 20, 10, 10)
+    score = 0
+    gameOver = False
+
+    while not gameOver:
+        screen.fill(WHITE)
+        archer.display()
+        archer.update(0, 0)
+
+        for balloon in listOfBalloons:
+            balloon.display()
+            balloon.update()
+
+            if balloon.balloonRect.colliderect(arrow.arrowRect):
+                score += 1
+                balloon.balloonRect.y = HEIGHT + 10
+                arrow.updateHit()
+
+        arrow.display()
+        arrow.update()
+
+        if arrow.arrowRect.x > WIDTH:
+            arrow.arrowRect.x = archer.archerRect.x + archer.archerRect.w // 2
+            arrow.arrowRect.y = archer.archerRect.y + archer.archerRect.h // 2
+            arrow.updateHit()
+
+        text = font.render("Score: " + str(score), True, GREEN)
+        screen.blit(text, (10, 10))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                gameOver = True
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            archer.update(-1, 0)
+        elif keys[pygame.K_RIGHT]:
+            archer.update(1, 0)
+        elif keys[pygame.K_UP]:
+            archer.update(0, -1)
+        elif keys[pygame.K_DOWN]:
+            archer.update(0, 1)
+        elif keys[pygame.K_SPACE]:
+            if arrow.getHit() == 0:
+                arrow.arrowRect.x = archer.archerRect.x + archer.archerRect.w // 2
+                arrow.arrowRect.y = archer.archerRect.y + archer.archerRect.h // 2
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
