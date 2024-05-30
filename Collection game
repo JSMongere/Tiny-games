@@ -1,0 +1,25 @@
+import collections
+
+# Initialize the game state
+game_state = collections.Counter({'A': 5, 'B': 5, 'C': 2})
+
+# Game loop
+while True:
+    # Print the current game state
+    print("Current game state:", game_state)
+
+    # Ask the user for their move
+    move = input("Enter the letter you want to collect (A, B, or C): ")
+
+    # Check if the move is valid
+    if move in game_state and game_state[move] > 0:
+        # Update the game state
+        game_state[move] -= 1
+        print("You collected one", move)
+    else:
+        print("Invalid move. Try again!")
+
+    # Check if the game is over
+    if all(value == 0 for value in game_state.values()):
+        print("Game over! Congratulations, you won!")
+        break
