@@ -1,0 +1,23 @@
+import csv
+
+# Load the combinations from the CSV file
+combinations = {}
+with open('combinations.csv', 'r') as file:
+    reader = csv.reader(file)
+    for row in reader:
+        element1, element2, output = row
+        combinations[(element1, element2)] = output
+        combinations[(element2, element1)] = output  # Order of combination doesn't matter
+
+def alchemy_game():
+    print("Welcome to AlchemPy!")
+    while True:
+        input1 = input("Enter the first element: ")
+        input2 = input("Enter the second element: ")
+        if (input1, input2) in combinations:
+            print(f"{input1} + {input2} = {combinations[(input1, input2)]}")
+        else:
+            print("Unknown combination. Try again!")
+
+if __name__ == "__main__":
+    alchemy_game()
