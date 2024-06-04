@@ -1,0 +1,46 @@
+import random
+
+class ClassStats:
+    def __init__(self, name, min_hp, max_hp, min_mp, max_mp, min_str, max_str, min_wis, max_wis, min_def, max_def, min_dex, max_dex):
+        self.name = name
+        self.min_hp = min_hp
+        self.max_hp = max_hp
+        self.min_mp = min_mp
+        self.max_mp = max_mp
+        self.min_str = min_str
+        self.max_str = max_str
+        self.min_wis = min_wis
+        self.max_wis = max_wis
+        self.min_def = min_def
+        self.max_def = max_def
+        self.min_dex = min_dex
+        self.max_dex = max_dex
+
+    def assign_stats(self):
+        return {
+            'hp': random.randint(self.min_hp, self.max_hp),
+            'mp': random.randint(self.min_mp, self.max_mp),
+            'str': random.randint(self.min_str, self.max_str),
+            'wis': random.randint(self.min_wis, self.max_wis),
+            'def': random.randint(self.min_def, self.max_def),
+            'dex': random.randint(self.min_dex, self.max_dex)
+        }
+
+class_definitions = {
+    1: ClassStats('Rogue', 100, 125, 50, 75, 5, 10, 10, 20, 5, 10, 10, 20),
+    2: ClassStats('Wizard', 200, 225, 40, 60, 1, 5, 10, 20, 1, 5, 10, 15)
+}
+
+def select_class():
+    while True:
+        try:
+            klass = int(input('Please choose your class:\n (Enter the corresponding number)\n1) Rogue\n2) Wizard\n\n'))
+            if klass in class_definitions:
+                return class_definitions[klass].assign_stats()
+            else:
+                print("Invalid entry, expected one of", sorted(class_definitions.keys()))
+        except ValueError:
+            print("Invalid entry, expected an integer.")
+
+player_stats = select_class()
+print(f"\nClass: {player_stats['name']}\nHealth: {player_stats['hp']}\nMana: {player_stats['mp']}\nStrength: {player_stats['str']}\nWisdom: {player_stats['wis']}\nDefense: {player_stats['def']}\nDexterity: {player_stats['dex']}\n")
