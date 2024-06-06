@@ -1,0 +1,91 @@
+# Define the menu items and their prices
+drinks = ["water", "soda", "juice", "tea"]
+prices = [0, 2, 3, 1]
+
+meals = ["spaghetti and meatballs", "steak and roasted vegetables", "burger and fries", "grilled cheese"]
+meal_prices = [10, 15, 12, 8]
+
+desserts = ["cake", "ice cream", "brownies", "cookies"]
+dessert_prices = [5, 3, 4, 2]
+
+# Initialize the user's money
+money = 20
+
+# Ask the user to select a drink
+print("Welcome to the cooking game!")
+print("You have ${} to spend.".format(money))
+print("What would you like to drink?")
+for i, drink in enumerate(drinks):
+    print("{}: ${}".format(drink, prices[i]))
+
+drinkChoice = int(input("Enter the number of your choice: "))
+validDrink = False
+while not validDrink:
+    if drinkChoice == 1:
+        money = money - prices[1]
+        print("Okay, {} sounds perfect! You have ${} remaining.\n".format(drinks[1], money))
+        validDrink = True
+    elif drinkChoice == 2:
+        money = money - prices[2]
+        print("Okay, {} sounds perfect! You have ${} remaining.\n".format(drinks[2], money))
+        validDrink = True
+    elif drinkChoice == 3:
+        money = money - prices[3]
+        print("Okay, {} sounds perfect! You have ${} remaining.\n".format(drinks[3], money))
+        validDrink = True
+    else:
+        drinkChoice = int(input("Sorry, that doesn't seem to be an option. Try again:\n"))
+
+# Ask the user to select a meal
+print("What would you like to eat?")
+for i, meal in enumerate(meals):
+    print("{}: ${}".format(meal, meal_prices[i]))
+
+mealChoice = int(input("Enter the number of your choice: "))
+validMeal = False
+while not validMeal:
+    if mealChoice == 1:
+        money = money - meal_prices[1]
+        print("One {} coming right up! You have ${} remaining.\n".format(meals[1], money))
+        validMeal = True
+    elif mealChoice == 2:
+        money = money - meal_prices[2]
+        print("One {} coming right up! You have ${} remaining.\n".format(meals[2], money))
+        validMeal = True
+    elif mealChoice == 3:
+        money = money - meal_prices[3]
+        print("One {} coming right up! You have ${} remaining.\n".format(meals[3], money))
+        validMeal = True
+    else:
+        mealChoice = int(input("Sorry, that doesn't seem to be an option. Try again:\n"))
+
+# Ask the user to select a dessert
+print("What would you like for dessert?")
+for i, dessert in enumerate(desserts):
+    print("{}: ${}".format(dessert, dessert_prices[i]))
+
+dessertsChoice = int(input("Enter the number of your choice: "))
+validDesserts = False
+while not validDesserts:
+    if dessertsChoice == 1:
+        money = money - dessert_prices[1]
+        print("One {} coming right up! You have ${} remaining.\n".format(desserts[1], money))
+        validDesserts = True
+    elif dessertsChoice == 2:
+        money = money - dessert_prices[2]
+        print("One {} coming right up! You have ${} remaining.\n".format(desserts[2], money))
+        validDesserts = True
+    elif dessertsChoice == 3:
+        money = money - dessert_prices[3]
+        print("One {} coming right up! You have ${} remaining.\n".format(desserts[3], money))
+        validDesserts = True
+    else:
+        dessertsChoice = int(input("Sorry, that doesn't seem to be an option. Try again:\n"))
+
+# Display the bill
+print("Thank you for visiting this restaurant!")
+print("Here is your bill:")
+print("Drink: ${}".format(prices[drinkChoice - 1]))
+print("Meal: ${}".format(meal_prices[mealChoice - 1]))
+print("Dessert: ${}".format(dessert_prices[dessertsChoice - 1]))
+print("Total: ${}".format(prices[drinkChoice - 1] + meal_prices[mealChoice - 1] + dessert_prices[dessertsChoice - 1]))
