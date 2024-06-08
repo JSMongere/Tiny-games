@@ -1,0 +1,28 @@
+from mingus.core import chords
+from mingus.containers import Note
+from midiutil.MidiFile import MIDIFile
+
+# Define the chord progression
+chord_progression = ["Cmaj7", "Cmaj7", "Fmaj7", "GDom7"]
+
+# Create a MIDI file
+midi_file = MIDIFile(1)  # Create a MIDIFile object with one track
+
+# Set the tempo
+midi_file.addTempo(0, 0, 120)  # Set the tempo to 120 BPM
+
+# Define the duration of each chord
+chord_duration = 4  # 4 beats per chord
+
+# Iterate over the chord progression
+for i, chord in enumerate(chord_progression):
+    # Get the notes for the current chord
+    notes = chords.from_shorthand(chord)
+    
+    # Add the notes to the MIDI file
+    for note in notes:
+        midi_file.addNote(0, Note(note).midi_value, i * chord_duration, chord_duration, 100)
+
+# Save the MIDI file
+with open("music_game.mid", "wb") as output_file:
+    midi_file.writeFile(output_file)
