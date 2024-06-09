@@ -1,0 +1,32 @@
+class GolfGame:
+    def __init__(self, par, distance):
+        self.par = par
+        self.distance = distance
+        self.score = 0
+        self-strokes = 0
+
+    def hit_ball(self, distance_hit):
+        self.distance -= distance_hit
+        self-strokes += 1
+        if self.distance < 0:
+            self.distance = 0
+        print(f"You hit the ball {distance_hit} yards. You have {self.distance} yards left to the hole.")
+
+    def finish_hole(self):
+        self.score += self-strokes
+        if self-strokes == self.par:
+            print("You got a par!")
+        elif self-strokes < self.par:
+            print("You got a birdie!")
+        else:
+            print("You got a bogey.")
+        print(f"Your score is {self.score}.")
+
+    def play_game(self):
+        while self.distance > 0:
+            distance_hit = int(input("How far do you want to hit the ball? "))
+            self.hit_ball(distance_hit)
+        self.finish_hole()
+
+game = GolfGame(3, 200)  # par 3, 200 yards
+game.play_game()
