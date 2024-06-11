@@ -1,0 +1,15 @@
+import random
+
+while True:
+    user_num_previous = None
+    for __ in range(5):
+        user_num = int(input("Choose a number from 1 to 10: "))
+        ai_num = user_num_previous or random.randint(1, 10)
+        print(f"AI thinks your number is {ai_num}")
+        if user_num == ai_num:
+            print("AI guessed your number correctly!")
+        else:
+            print("AI did NOT guess your number correctly!")
+        user_num_previous = user_num
+
+    input("Game Over!\nPress ENTER to reset the game... ")
