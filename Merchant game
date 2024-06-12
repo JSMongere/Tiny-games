@@ -1,0 +1,62 @@
+class MerchantGame:
+    def __init__(self):
+        self.balance = 1000
+        self.inventory = {"apple": 0, "banana": 0, "orange": 0}
+
+    def display_inventory(self):
+        print("Current Inventory:")
+        for item, quantity in self.inventory.items():
+            print(f"{item.capitalize()}: {quantity}")
+
+    def display_balance(self):
+        print(f"Current Balance: ${self.balance:.2f}")
+
+    def buy_item(self, item, price, quantity):
+        if self.balance >= price * quantity:
+            self.balance -= price * quantity
+            self.inventory[item] += quantity
+            print(f"You bought {quantity} {item}(s) for ${price * quantity:.2f}.")
+        else:
+            print("Insufficient balance.")
+
+    def sell_item(self, item, price, quantity):
+        if self.inventory[item] >= quantity:
+            self.balance += price * quantity
+            self.inventory[item] -= quantity
+            print(f"You sold {quantity} {item}(s) for ${price * quantity:.2f}.")
+        else:
+            print("Not enough items in inventory.")
+
+    def play(self):
+        while True:
+            print("\n1. Display Inventory")
+            print("2. Display Balance")
+            print("3. Buy Item")
+            print("4. Sell Item")
+            print("5. Exit Game")
+            choice = input("Choose an option: ")
+
+            if choice == "1":
+                self.display_inventory()
+            elif choice == "2":
+                self.display_balance()
+            elif choice == "3":
+                item = input("Enter item to buy (apple, banana, orange): ")
+                price = float(input("Enter price: "))
+                quantity = int(input("Enter quantity: "))
+                self.buy_item(item, price, quantity)
+            elif choice == "4":
+                item = input("Enter item to sell (apple, banana, orange): ")
+                price = float(input("Enter price: "))
+                quantity = int(input("Enter quantity: "))
+                self.sell_item(item, price, quantity)
+            elif choice == "5":
+                print("Exiting game. Goodbye!")
+                break
+            else:
+                print("Invalid option. Please choose again.")
+
+
+if __name__ == "__main__":
+    game = MerchantGame()
+    game.play()
