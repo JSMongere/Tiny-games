@@ -1,0 +1,66 @@
+class TradingGame:
+    def __init__(self):
+        self.balance = 1000
+        self.inventory = {}
+
+    def display_balance(self):
+        print(f"Your current balance is: ${self.balance:.2f}")
+
+    def display_inventory(self):
+        print("Your current inventory:")
+        for item, quantity in self.inventory.items():
+            print(f"{item}: {quantity} units")
+
+    def buy(self, item, price, quantity):
+        if self.balance >= price * quantity:
+            self.balance -= price * quantity
+            if item in self.inventory:
+                self.inventory[item] += quantity
+            else:
+                self.inventory[item] = quantity
+            print(f"You bought {quantity} units of {item} for ${price * quantity:.2f}")
+        else:
+            print("You don't have enough balance to make this purchase.")
+
+    def sell(self, item, price, quantity):
+        if item in self.inventory and self.inventory[item] >= quantity:
+            self.balance += price * quantity
+            self.inventory[item] -= quantity
+            if self.inventory[item] == 0:
+                del self.inventory[item]
+            print(f"You sold {quantity} units of {item} for ${price * quantity:.2f}")
+        else:
+            print("You don't have enough units of this item to sell.")
+
+    def play(self):
+        while True:
+            print("\n1. Display Balance")
+            print("2. Display Inventory")
+            print("3. Buy Item")
+            print("4. Sell Item")
+            print("5. Quit Game")
+            choice = input("Choose an option: ")
+            if choice == "1":
+                self.display_balance()
+            elif choice == "2":
+                self.display_inventory()
+            elif choice == "3":
+                item = input("Enter the item to buy: ")
+                price = float(input("Enter the price of the item: "))
+                quantity = int(input("Enter the quantity to buy: "))
+                self.buy(item, price, quantity)
+            elif choice == "4":
+                item = input("Enter the item to sell: ")
+                price = float(input("Enter the price of the item: "))
+                quantity = int(input("Enter the quantity to sell: "))
+                self.sell(item, price, quantity)
+            elif choice == "5":
+                print("Thanks for playing!")
+                break
+            else:
+                print("Invalid option. Please choose again.")
+
+
+if __name__ == "__main__":
+    game = TradingGame()
+    game.play()
