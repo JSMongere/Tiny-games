@@ -1,0 +1,83 @@
+import time
+import random
+
+def start_game():
+    print("Welcome to 'The Cursed Mansion'!")
+    print("You are standing in front of a creepy old mansion.")
+    print("Do you want to enter? (yes/no)")
+
+    response = input().lower()
+
+    if response == "yes":
+        enter_mansion()
+    elif response == "no":
+        print("You turn back and run away. Game over.")
+    else:
+        print("Invalid input. Please try again.")
+        start_game()
+
+def enter_mansion():
+    print("You slowly open the creaky door and step inside.")
+    print("The door slams shut behind you. You hear footsteps coming from upstairs.")
+    print("Do you want to investigate? (yes/no)")
+
+    response = input().lower()
+
+    if response == "yes":
+        investigate()
+    elif response == "no":
+        print("You try to find a way out, but the doors are locked. Game over.")
+    else:
+        print("Invalid input. Please try again.")
+        enter_mansion()
+
+def investigate():
+    print("You creep upstairs, trying not to make a sound.")
+    print("You find a room with a strange artifact in the center.")
+    print("Suddenly, you hear a voice whispering in your ear...")
+
+    time.sleep(2)  # Add a dramatic pause
+
+    print("Do you want to take the artifact? (yes/no)")
+
+    response = input().lower()
+
+    if response == "yes":
+        take_artifact()
+    elif response == "no":
+        print("You leave the room, but the voice follows you...")
+        game_over()
+    else:
+        print("Invalid input. Please try again.")
+        investigate()
+
+def take_artifact():
+    print("You grab the artifact, and the voice grows louder.")
+    print("You feel a chill running down your spine.")
+    print("Do you want to try to escape? (yes/no)")
+
+    response = input().lower()
+
+    if response == "yes":
+        escape()
+    elif response == "no":
+        print("You're consumed by the darkness. Game over.")
+    else:
+        print("Invalid input. Please try again.")
+        take_artifact()
+
+def escape():
+    print("You make a run for the door, but it's locked.")
+    print("You hear the voice laughing maniacally.")
+    print("Suddenly, the door creaks open...")
+
+    time.sleep(2)  # Add another dramatic pause
+
+    print("You escape the mansion, but the horror follows you...")
+    print("Congratulations, you won! (Or did you?)")
+
+def game_over():
+    print("You're trapped in the mansion forever.")
+    print("Game over.")
+
+start_game()
