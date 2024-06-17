@@ -1,0 +1,29 @@
+class OrigamiGame:
+    def __init__(self, instructions):
+        self.instructions = instructions
+        self.current_step = 0
+
+    def display_instructions(self):
+        print(f"Step {self.current_step + 1}:\n" + self.instructions[self.current_step])
+
+    def advance(self):
+        self.current_step += 1
+        if self.current_step >= len(self.instructions):
+            print("Congratulations! You've completed the origami game.")
+        else:
+            self.display_instructions()
+
+if __name__ == "__main__":
+    origami_game = OrigamiGame([
+        "Fold the paper in half vertically.",
+        "Unfold the paper, then fold the top two corners down so they meet the center crease.",
+        "Fold the top edges down and towards the center crease, aligning the edges with the center crease.",
+        "Fold the uppermost triangles down so that the top point aligns with the bottom edge of the paper.",
+        "Fold the plane in half towards you along the central crease.",
+        "Make sure the edges are aligned, then fold the wings down, matching the top edges up with the body.",
+    ])
+    origami_game.display_instructions()
+    user_input = input("Press Enter to advance to the next step or type 'quit' to exit: ")
+    while user_input != "quit":
+        origami_game.advance()
+        user_input = input("Press Enter to advance to the next step or type 'quit' to exit: ")
