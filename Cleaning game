@@ -1,0 +1,34 @@
+import random
+
+class CleaningGame:
+    def __init__(self):
+        self.rooms = ["Kitchen", "Living Room", "Bedroom", "Bathroom"]
+        self.dirtiness_levels = {room: random.randint(1, 10) for room in self.rooms}
+        self.score = 0
+
+    def display_rooms(self):
+        for room, dirtiness in self.dirtiness_levels.items():
+            print(f"{room}: {dirtiness} dirtiness level")
+
+    def clean_room(self, room):
+        if room in self.rooms:
+            if self.dirtiness_levels[room] > 0:
+                self.dirtiness_levels[room] -= 1
+                self.score += 1
+                print(f"You cleaned the {room}! Score: {self.score}")
+            else:
+                print(f"The {room} is already clean!")
+        else:
+            print("Invalid room. Please choose a valid room.")
+
+    def play(self):
+        while True:
+            self.display_rooms()
+            room = input("Enter a room to clean (or 'quit' to exit): ")
+            if room.lower() == 'quit':
+                break
+            self.clean_room(room)
+
+if __name__ == "__main__":
+    game = CleaningGame()
+    game.play()
