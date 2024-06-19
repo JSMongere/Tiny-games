@@ -1,0 +1,27 @@
+import random
+
+def throwing_game():
+    print("Welcome to the Throwing Game!")
+    print("You will have 3 chances to throw the ball into the basket.")
+    print("After each throw, you will get a score based on your throw.")
+    print("The goal is to get the highest score possible.")
+
+    score = 0
+    for i in range(3):
+        print(f"\nThrow {i+1}:")
+        throw_distance = int(input("Enter the distance of your throw (in meters): "))
+        basket_distance = random.randint(1, 10)  # random distance of the basket
+
+        if throw_distance == basket_distance:
+            print("Congratulations! You got a perfect throw!")
+            score += 10
+        elif throw_distance > basket_distance:
+            print(f"Your throw was {throw_distance - basket_distance} meters too long.")
+            score += 5
+        else:
+            print(f"Your throw was {basket_distance - throw_distance} meters too short.")
+            score += 3
+
+    print(f"\nYour final score is {score} points!")
+
+throwing_game()
