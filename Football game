@@ -1,0 +1,50 @@
+import random
+
+class Team:
+    def __init__(self, name):
+        self.name = name
+        self.score = 0
+
+class FootballGame:
+    def __init__(self, team1, team2):
+        self.team1 = team1
+        self.team2 = team2
+
+    def play_game(self):
+        print(f"Welcome to the football game between {self.team1.name} and {self.team2.name}!")
+
+        for i in range(1, 5):
+            print(f"\n--- Quarter {i} ---")
+            self.play_quarter()
+
+        self.print_final_score()
+
+    def play_quarter(self):
+        team1_score = random.randint(0, 10)
+        team2_score = random.randint(0, 10)
+
+        print(f"{self.team1.name} scored {team1_score} points.")
+        print(f"{self.team2.name} scored {team2_score} points.")
+
+        self.team1.score += team1_score
+        self.team2.score += team2_score
+
+    def print_final_score(self):
+        print(f"\nFinal Score - {self.team1.name}: {self.team1.score}, {self.team2.name}: {self.team2.score}")
+
+        if self.team1.score > self.team2.score:
+            print(f"{self.team1.name} wins!")
+        elif self.team2.score > self.team1.score:
+            print(f"{self.team2.name} wins!")
+        else:
+            print("It's a tie!")
+
+# Create teams
+team1 = Team("Lions")
+team2 = Team("Tigers")
+
+# Create a football game
+game = FootballGame(team1, team2)
+
+# Play the game
+game.play_game()
