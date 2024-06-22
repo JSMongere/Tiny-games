@@ -1,0 +1,34 @@
+import random
+
+# List of animals
+animals = ["dog", "cat", "elephant", "lion", "tiger", "bear", "monkey", "zebra", "giraffe", "kangaroo"]
+
+def play_game():
+    print("Welcome to the Animal Guessing Game!")
+    print("I'm thinking of an animal. You can guess the animal by typing its name.")
+    print("If you need a hint, type 'hint'. If you want to quit, type 'quit'.")
+
+    # Choose a random animal from the list
+    animal_to_guess = random.choice(animals)
+
+    while True:
+        guess = input("What's your guess? ").lower()
+
+        if guess == "quit":
+            print("Thanks for playing!")
+            break
+        elif guess == "hint":
+            if animal_to_guess in ["dog", "cat"]:
+                print("The animal is a common household pet.")
+            elif animal_to_guess in ["elephant", "lion", "tiger", "bear"]:
+                print("The animal is a large wild animal.")
+            else:
+                print("The animal is a unique or exotic creature.")
+        elif guess == animal_to_guess:
+            print("Congratulations! You guessed the animal correctly.")
+            break
+        else:
+            print("Sorry, that's not correct. Try again!")
+
+if __name__ == "__main__":
+    play_game()
