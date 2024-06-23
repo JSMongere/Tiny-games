@@ -1,0 +1,45 @@
+import tkinter as tk
+import random
+
+class LootClickerGame:
+    def __init__(self):
+        self.root = tk.Tk()
+        self.root.title("Loot Clicker Game")
+
+        self.gold = 0
+        self.loot = 0
+        self.clicker_level = 1
+        self.clicker_multiplier = 1
+
+        self.gold_label = tk.Label(self.root, text="Gold: 0")
+        self.gold_label.pack()
+
+        self.loot_label = tk.Label(self.root, text="Loot: 0")
+        self.loot_label.pack()
+
+        self.clicker_button = tk.Button(self.root, text="Loot", command=self.loot_click)
+        self.clicker_button.pack()
+
+        self.upgrade_button = tk.Button(self.root, text="Upgrade Clicker", command=self.upgrade_clicker)
+        self.upgrade_button.pack()
+
+        self.root.mainloop()
+
+    def loot_click(self):
+        gold_gain = random.randint(1, 10) * self.clicker_multiplier
+        loot_gain = random.randint(1, 5) * self.clicker_multiplier
+        self.gold += gold_gain
+        self.loot += loot_gain
+        self.gold_label.config(text=f"Gold: {self.gold}")
+        self.loot_label.config(text=f"Loot: {self.loot}")
+
+    def upgrade_clicker(self):
+        if self.gold >= 100:
+            self.gold -= 100
+            self.clicker_level += 1
+            self.clicker_multiplier += 0.1
+            self.gold_label.config(text=f"Gold: {self.gold}")
+            self.clicker_button.config(text=f"Loot (Level {self.clicker_level})")
+
+if __name__ == "__main__":
+    game = LootClickerGame()
