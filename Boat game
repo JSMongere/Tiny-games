@@ -1,0 +1,54 @@
+import random
+
+class BoatGame:
+    def __init__(self):
+        self.board = self.create_board()
+        self.boats = self.create_boats()
+        self.guesses = 0
+
+    def create_board(self):
+        board = []
+        for _ in range(5):
+            row = []
+            for _ in range(5):
+                row.append("~")
+            board.append(row)
+        return board
+
+    def create_boats(self):
+        boats = []
+        for _ in range(3):
+            boat_row = random.randint(0, 4)
+            boat_col = random.randint(0, 4)
+            boats.append((boat_row, boat_col))
+        return boats
+
+    def print_board(self):
+        for row in self.board:
+            print(" ".join(row))
+
+    def guess(self, row, col):
+        if (row, col) in self.boats:
+            print("Hit!")
+            self.board[row][col] = "X"
+            self.boats.remove((row, col))
+            if not self.boats:
+                print("You win!")
+                return True
+        else:
+            print("Miss!")
+            self.board[row][col] = "O"
+        self.guesses += 1
+        return False
+
+    def play(self):
+        while True:
+            self.print_board()
+            row = int(input("Guess row (0-4): "))
+            col = int(input("Guess column (0-4): "))
+            if self.guess(row, col):
+                break
+        print(f"Game over! You made {self.guesses} guesses.")
+
+game = BoatGame()
+game.play()
