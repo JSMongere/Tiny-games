@@ -1,0 +1,76 @@
+# Book Game in Python
+
+# Define the story and choices
+story = {
+    "start": {
+        "text": "You are standing in a dark forest. You see a path to your left and a path to your right.",
+        "choices": ["left", "right"]
+    },
+    "left": {
+        "text": "You take the path to the left. You see a old castle in front of you.",
+        "choices": ["enter", "explore"]
+    },
+    "right": {
+        "text": "You take the path to the right. You see a dense jungle in front of you.",
+        "choices": ["venture", "return"]
+    },
+    "enter": {
+        "text": "You enter the castle. You see a treasure chest in front of you.",
+        "choices": ["open", "search"]
+    },
+    "explore": {
+        "text": "You explore the surrounding area. You find a hidden door.",
+        "choices": ["open", "ignore"]
+    },
+    "venture": {
+        "text": "You venture into the jungle. You see a wild animal in front of you.",
+        "choices": ["fight", "run"]
+    },
+    "return": {
+        "text": "You return to the start of the forest.",
+        "choices": ["left", "right"]
+    },
+    "open": {
+        "text": "You open the treasure chest. You find a golden key.",
+        "choices": ["use", "keep"]
+    },
+    "search": {
+        "text": "You search the castle. You find a hidden passage.",
+        "choices": ["follow", "return"]
+    },
+    "open_door": {
+        "text": "You open the hidden door. You find a secret room.",
+        "choices": ["explore", "return"]
+    },
+    "fight": {
+        "text": "You fight the wild animal. You win!",
+        "choices": ["return", "venture"]
+    },
+    "run": {
+        "text": "You run away from the wild animal. You return to the start of the forest.",
+        "choices": ["left", "right"]
+    },
+    "use": {
+        "text": "You use the golden key to unlock a secret door.",
+        "choices": ["enter", "return"]
+    },
+    "keep": {
+        "text": "You keep the golden key. You return to the start of the forest.",
+        "choices": ["left", "right"]
+    }
+}
+
+# Define the game function
+def play_game():
+    current_scene = "start"
+    while True:
+        scene = story[current_scene]
+        print(scene["text"])
+        choice = input("What do you do? ({}): ".format(", ".join(scene["choices"])))
+        if choice in scene["choices"]:
+            current_scene = choice
+        else:
+            print("Invalid choice. Try again!")
+
+# Start the game
+play_game()
