@@ -1,0 +1,59 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+JELLY_SIZE = 50
+SPEED = 5
+
+# Set up some colors
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the jelly
+jelly_x, jelly_y = random.randint(0, WIDTH - JELLY_SIZE), random.randint(0, HEIGHT - JELLY_SIZE)
+
+# Set up the player
+player_x, player_y = WIDTH / 2, HEIGHT - JELLY_SIZE * 2
+
+# Game loop
+running = True
+while running:
+    # Event handling
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Get a list of all keys currently being pressed down
+    keys = pygame.key.get_pressed()
+
+    # Move the player
+    if keys[pygame.K_LEFT]:
+        player_x -= SPEED
+    if keys[pygame.K_RIGHT]:
+        player_x += SPEED
+
+    # Ensure the player doesn't move off the screen
+    player_x = max(0, min(player_x, WIDTH - JELLY_SIZE))
+
+    # Check for collision with the jelly
+    if (player_x <= jelly_x + JELLY_SIZE and
+        player_x + JELLY_SIZE >= jelly_x and
+        player_y <= jelly_y + JELLY_SIZE and
+        player_y + JELLY_SIZE >= jelly_y):
+        jelly_x, jelly_y = random.randint(0, WIDTH - JELLY_SIZE), random.randint(0, HEIGHT - JELLY_SIZE)
+
+    # Draw everything
+    screen.fill(WHITE)
+    pygame.draw.rect(screen, RED, (jelly_x, jelly_y, JELLY_SIZE, JELLY_SIZE))
+    pygame.draw.rect(screen, RED, (player_x, player_y, JELLY_SIZE, JELLY_SIZE))
+    pygame.display.flip()
+
+# Quit Pygame
+pygame.quit()
