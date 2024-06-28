@@ -1,0 +1,32 @@
+import random
+
+class HockeyGame:
+    def __init__(self, team1, team2):
+        self.team1 = team1
+        self.team2 = team2
+        self.score1 = 0
+        self.score2 = 0
+
+    def play_period(self):
+        score1 = random.randint(0, 3)
+        score2 = random.randint(0, 3)
+        self.score1 += score1
+        self.score2 += score2
+        print(f"After period, the score is {self.team1} {self.score1}, {self.team2} {self.score2}")
+
+    def play_game(self):
+        for i in range(3):
+            print(f"Period {i+1} is starting...")
+            self.play_period()
+        if self.score1 > self.score2:
+            print(f"{self.team1} wins {self.score1}-{self.score2}!")
+        elif self.score2 > self.score1:
+            print(f"{self.team2} wins {self.score2}-{self.score1}!")
+        else:
+            print("It's a tie!")
+
+# Create a new game
+game = HockeyGame("Team A", "Team B")
+
+# Play the game
+game.play_game()
