@@ -1,0 +1,58 @@
+# Investment Game
+
+class InvestmentGame:
+    def __init__(self, initial_investment, interest_rate):
+        self.initial_investment = initial_investment
+        self.interest_rate = interest_rate
+        self.current_balance = initial_investment
+
+    def invest(self, amount):
+        self.current_balance += amount
+
+    def withdraw(self, amount):
+        if amount > self.current_balance:
+            print("Insufficient balance!")
+        else:
+            self.current_balance -= amount
+
+    def calculate_interest(self):
+        interest = self.current_balance * (self.interest_rate / 100)
+        self.current_balance += interest
+        return interest
+
+    def display_balance(self):
+        print(f"Current Balance: ${self.current_balance:.2f}")
+
+def main():
+    initial_investment = float(input("Enter initial investment: $"))
+    interest_rate = float(input("Enter interest rate (%): "))
+
+    game = InvestmentGame(initial_investment, interest_rate)
+
+    while True:
+        print("\n1. Invest")
+        print("2. Withdraw")
+        print("3. Calculate Interest")
+        print("4. Display Balance")
+        print("5. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            amount = float(input("Enter amount to invest: $"))
+            game.invest(amount)
+        elif choice == "2":
+            amount = float(input("Enter amount to withdraw: $"))
+            game.withdraw(amount)
+        elif choice == "3":
+            interest = game.calculate_interest()
+            print(f"Interest earned: ${interest:.2f}")
+        elif choice == "4":
+            game.display_balance()
+        elif choice == "5":
+            break
+        else:
+            print("Invalid option. Please try again.")
+
+if __name__ == "__main__":
+    main()
