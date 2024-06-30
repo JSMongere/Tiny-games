@@ -1,0 +1,52 @@
+class Cafe:
+    def __init__(self):
+        self.menu = {
+            "coffee": 5,
+            "tea": 3,
+            "muffin": 2,
+            "cake": 10
+        }
+        self.inventory = {
+            "coffee": 10,
+            "tea": 10,
+            "muffin": 10,
+            "cake": 10
+        }
+        self.cash = 0
+
+    def display_menu(self):
+        print("Menu:")
+        for item, price in self.menu.items():
+            print(f"{item}: ${price}")
+
+    def display_inventory(self):
+        print("Inventory:")
+        for item, quantity in self.inventory.items():
+            print(f"{item}: {quantity} pieces")
+
+    def take_order(self):
+        order = input("What would you like to order? (coffee, tea, muffin, cake): ")
+        if order in self.menu:
+            if self.inventory[order] > 0:
+                print(f"You ordered {order}. That will be ${self.menu[order]}.")
+                self.cash += self.menu[order]
+                self.inventory[order] -= 1
+            else:
+                print("Sorry, we're out of that item.")
+        else:
+            print("Invalid order. Please try again.")
+
+    def play_game(self):
+        while True:
+            print("\nCafe Game")
+            print("---------")
+            self.display_menu()
+            self.display_inventory()
+            print(f"Current cash: ${self.cash}")
+            self.take_order()
+            play_again = input("Would you like to play again? (yes/no): ")
+            if play_again.lower() != "yes":
+                break
+
+cafe = Cafe()
+cafe.play_game()
