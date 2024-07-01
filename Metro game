@@ -1,0 +1,39 @@
+import random
+
+class MetroGame:
+    def __init__(self):
+        self.stations = ["Station A", "Station B", "Station C", "Station D", "Station E"]
+        self.current_station = random.choice(self.stations)
+        self.score = 0
+
+    def play(self):
+        print("Welcome to the Metro game!")
+        print("You are currently at", self.current_station)
+        print("Your goal is to reach Station E")
+
+        while True:
+            direction = input("Enter 'n' to move north or '' to move south: ")
+            if direction == 'n':
+                if self.stations.index(self.current_station) == 0:
+                    print("You can't go north from here!")
+                else:
+                    self.current_station = self.stations[self.stations.index(self.current_station) - 1]
+                    print("You moved north to", self.current_station)
+                    self.score += 1
+            elif direction == '':
+                if self.stations.index(self.current_station) == len(self.stations) - 1:
+                    print("You can't go south from here!")
+                else:
+                    self.current_station = self.stations[self.stations.index(self.current_station) + 1]
+                    print("You moved south to", self.current_station)
+                    self.score += 1
+            else:
+                print("Invalid direction. Please enter 'n' or ''.")
+
+            if self.current_station == "Station E":
+                print("Congratulations! You reached Station E in", self.score, "moves.")
+                break
+
+if __name__ == "__main__":
+    game = MetroGame()
+    game.play()
