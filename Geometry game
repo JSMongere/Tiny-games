@@ -1,0 +1,70 @@
+import pygame
+import random
+import math
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 800, 600
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the shapes
+shapes = []
+
+class Shape:
+    def __init__(self):
+        self.type = random.choice(['circle', 'ectangle', 'triangle'])
+        self.color = random.choice([RED, GREEN, BLUE])
+        self.x = random.randint(0, WIDTH)
+        self.y = random.randint(0, HEIGHT)
+        self.size = random.randint(20, 100)
+
+    def draw(self):
+        if self.type == 'circle':
+            pygame.draw.circle(screen, self.color, (self.x, self.y), self.size)
+        elif self.type == 'ectangle':
+            pygame.draw.rect(screen, self.color, (self.x, self.y, self.size, self.size))
+        elif self.type == 'triangle':
+            pygame.draw.polygon(screen, self.color, ((self.x, self.y), (self.x + self.size, self.y), (self.x + self.size / 2, self.y + self.size)))
+
+    def is_clicked(self, x, y):
+        if self.type == 'circle':
+            return math.sqrt((x - self.x) ** 2 + (y - self.y) ** 2) < self.size
+        elif self.type == 'ectangle':
+            return self.x < x < self.x + self.size and self.y < y < self.y + self.size
+        elif self.type == 'triangle':
+            # This is a simple implementation and may not work for all triangles
+            return self.x < x < self.x + self.size and self.y < y < self.y + self.size
+
+# Game loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            for shape in shapes:
+                if shape.is_clicked(event.pos[0], event.pos[1]):
+                    shapes.remove(shape)
+                    break
+
+    # Add new shapes
+    if random.random() < 0.1:
+        shapes.append(Shape())
+
+    # Draw everything
+    screen.fill(WHITE)
+    for shape in shapes:
+        shape.draw()
+
+    pygame.display.flip()
+
+# Quit Pygame
+pygame.quit()
