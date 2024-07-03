@@ -1,0 +1,25 @@
+import pygame
+from pygame.locals import *
+import random
+
+pygame.init()
+screen = pygame.display.set_mode((640, 480))
+clock = pygame.time.Clock()
+
+background = pygame.image.load("background.png")
+player = pygame.Rect(100, 100, 50, 50)
+
+while True:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == MOUSEBUTTONDOWN:
+            # Check if the mouse click was on the player
+            if player.collidepoint(event.pos):
+                # Do something when the player is clicked
+                pass
+    screen.blit(background, (0, 0))
+    pygame.draw.rect(screen, (255, 255, 0), player)
+    pygame.display.update()
+    clock.tick(60)
