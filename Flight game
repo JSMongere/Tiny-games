@@ -1,0 +1,71 @@
+import random
+
+class FlightGame:
+    def __init__(self):
+        self.altitude = 10000
+        self.fuel = 100
+        self.crashed = False
+
+    def start_game(self):
+        print("Welcome to the Flight Game!")
+        print("You are flying at an altitude of 10,000 feet.")
+        print("Your fuel level is 100%.")
+
+        while not self.crashed:
+            action = input("What do you want to do? (C)limb, (D)escend, (L)and, or (R)efuel: ")
+
+            if action.upper() == "C":
+                self.climb()
+            elif action.upper() == "D":
+                self.descend()
+            elif action.upper() == "L":
+                self.land()
+            elif action.upper() == "R":
+                self.refuel()
+            else:
+                print("Invalid action. Please try again.")
+
+    def climb(self):
+        if self.altitude < 20000:
+            self.altitude += 1000
+            self.fuel -= 10
+            print(f"You are now flying at an altitude of {self.altitude} feet.")
+            print(f"Your fuel level is {self.fuel}%.")
+        else:
+            print("You are already at maximum altitude.")
+
+    def descend(self):
+        if self.altitude > 0:
+            self.altitude -= 1000
+            self.fuel -= 10
+            print(f"You are now flying at an altitude of {self.altitude} feet.")
+            print(f"Your fuel level is {self.fuel}%.")
+        else:
+            print("You are already on the ground.")
+
+    def land(self):
+        if self.altitude == 0:
+            print("You have landed safely!")
+            self.crashed = True
+        else:
+            print("You need to descend to 0 feet to land.")
+
+    def refuel(self):
+        self.fuel = 100
+        print("Your fuel level has been refueled to 100%.")
+
+    def check_crash(self):
+        if self.fuel <= 0:
+            print("You have run out of fuel and crashed!")
+            self.crashed = True
+        elif self.altitude <= 0:
+            print("You have crashed into the ground!")
+            self.crashed = True
+
+    def play(self):
+        self.start_game()
+        while not self.crashed:
+            self.check_crash()
+
+game = FlightGame()
+game.play()
