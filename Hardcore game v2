@@ -1,0 +1,85 @@
+import random
+
+# Game constants
+TEMPLE_SIZE = 10
+MONSTER_CHANCE = 0.3
+TREASURE_CHANCE = 0.1
+
+# Player class
+class Player:
+    def __init__(self):
+        self.health = 100
+        self.strength = 10
+        self.gold = 0
+
+    def attack(self, monster):
+        damage = random.randint(0, self.strength)
+        monster.health -= damage
+        print(f"You attack the {monster.name} for {damage} damage!")
+
+    def is_alive(self):
+        return self.health > 0
+
+# Monster class
+class Monster:
+    def __init__(self, name, health, strength):
+        self.name = name
+        self.health = health
+        self.strength = strength
+
+    def attack(self, player):
+        damage = random.randint(0, self.strength)
+        player.health -= damage
+        print(f"The {self.name} attacks you for {damage} damage!")
+
+# Game logic
+def create_temple():
+    temple = []
+    for i in range(TEMPLE_SIZE):
+        room = {}
+        if random.random() < MONSTER_CHANCE:
+            monster = Monster("Goblin", 20, 5)
+            room["monster"] = monster
+        elif random.random() < TREASURE_CHANCE:
+            room["treasure"] = 100
+        temple.append(room)
+    return temple
+
+def play_game():
+    player = Player()
+    temple = create_temple()
+    current_room = 0
+
+    while current_room < TEMPLE_SIZE and player.is_alive():
+        print(f"You are in room {current_room+1} of the temple.")
+        room = temple[current_room]
+
+        if "monster" in room:
+            monster = room["monster"]
+            print(f"You encounter a {monster.name}!")
+            while monster.health > 0:
+                action = input("Do you want to attack or run? ")
+                if action.lower() == "attack":
+                    player.attack(monster)
+                    if monster.health <= 0:
+                        print(f"You defeated the {monster.name}!")
+                        break
+                elif action.lower() == "run":
+                    print("You run away!")
+                    break
+                else:
+                    print("Invalid action!")
+
+        elif "treasure" in room:
+            print(f"You found {room['treasure']} gold!")
+            player.gold += room["treasure"]
+
+        current_room += 1
+
+    if player.is_alive():
+        print("You reached the treasure chamber! Congratulations!")
+    else:
+        print("You died in the temple. Game over!")
+
+# Run the game
+play_game()
