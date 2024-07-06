@@ -1,0 +1,63 @@
+import random
+
+class Creature:
+    def __init__(self, name, attack, defense):
+        self.name = name
+        self.attack = attack
+        self.defense = defense
+        self.health = 100
+
+    def is_alive(self):
+        return self.health > 0
+
+    def take_damage(self, damage):
+        self.health -= damage
+        if self.health < 0:
+            self.health = 0
+
+    def __str__(self):
+        return f"{self.name} (Health: {self.health})"
+
+
+class EvolveGame:
+    def __init__(self):
+        self.creatures = [
+            Creature("Gloop", 10, 5),
+            Creature("Snarl", 15, 10),
+            Creature("Chomper", 20, 15),
+        ]
+        self.current_creature = random.choice(self.creatures)
+
+    def play_round(self):
+        print(f"\nYou are fighting: {self.current_creature}")
+        action = input("Do you want to (A)ttack or (R)un? ")
+        if action.lower() == "a":
+            damage = random.randint(0, 20)
+            print(f"You attack for {damage} damage!")
+            self.current_creature.take_damage(damage)
+            if self.current_creature.is_alive():
+                damage = random.randint(0, self.current_creature.attack)
+                print(f"{self.current_creature.name} attacks for {damage} damage!")
+                self.take_damage(damage)
+            else:
+                print(f"You killed {self.current_creature.name}!")
+                self.current_creature = random.choice(self.creatures)
+        elif action.lower() == "r":
+            print("You run away!")
+            self.current_creature = random.choice(self.creatures)
+        else:
+            print("Invalid action. Try again!")
+
+    def take_damage(self, damage):
+        print(f"You take {damage} damage!")
+        if damage > 50:
+            print("You died! Game over.")
+            exit()
+
+    def play_game(self):
+        while True:
+            self.play_round()
+
+
+game = EvolveGame()
+game.play_game()
