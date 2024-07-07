@@ -1,0 +1,54 @@
+# Drive Game in Python
+
+class Car:
+    def __init__(self):
+        self.speed = 0
+        self.gear = "N"
+
+    def accelerate(self):
+        if self.gear == "D":
+            self.speed += 10
+            print(f"Accelerating... Current speed: {self.speed} km/h")
+        else:
+            print("You need to shift into gear first!")
+
+    def brake(self):
+        if self.speed > 0:
+            self.speed -= 10
+            print(f"Braking... Current speed: {self.speed} km/h")
+        else:
+            print("You're already stopped!")
+
+    def shift_gear(self, gear):
+        if gear.upper() in ["D", "R", "N"]:
+            self.gear = gear.upper()
+            print(f"Gear shifted to {self.gear}")
+        else:
+            print("Invalid gear!")
+
+def game_loop():
+    car = Car()
+    while True:
+        print("\nDrive Game")
+        print("---------")
+        print("1. Accelerate")
+        print("2. Brake")
+        print("3. Shift Gear")
+        print("4. Quit")
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            car.accelerate()
+        elif choice == "2":
+            car.brake()
+        elif choice == "3":
+            gear = input("Enter gear (D/R/N): ")
+            car.shift_gear(gear)
+        elif choice == "4":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Try again!")
+
+if __name__ == "__main__":
+    game_loop()
