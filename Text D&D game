@@ -1,0 +1,63 @@
+import random
+
+class Character:
+    def __init__(self, name, health, attack):
+        self.name = name
+        self.health = health
+        self.attack = attack
+
+class Player(Character):
+    def __init__(self, name, health=100, attack=10):
+        super().__init__(name, health, attack)
+
+class Monster(Character):
+    def __init__(self, name, health, attack):
+        super().__init__(name, health, attack)
+
+def combat(player, monster):
+    while player.health > 0 and monster.health > 0:
+        print(f"\n{player.name}'s turn:")
+        print(f"Health: {player.health}")
+        print(f"{monster.name}'s health: {monster.health}")
+        action = input("Do you want to (A)ttack or (R)un? ")
+        if action.lower() == 'a':
+            monster.health -= player.attack
+            print(f"You attack {monster.name} for {player.attack} damage!")
+        elif action.lower() == 'r':
+            print("You run away!")
+            break
+        else:
+            print("Invalid action. Try again!")
+
+        if monster.health > 0:
+            print(f"\n{monster.name}'s turn:")
+            player.health -= monster.attack
+            print(f"{monster.name} attacks you for {monster.attack} damage!")
+
+    if player.health > 0:
+        print(f"\nYou defeated {monster.name}!")
+    else:
+        print(f"\n{monster.name} defeated you!")
+
+def main():
+    player_name = input("Enter your character's name: ")
+    player = Player(player_name)
+
+    monsters = [
+        Monster("Goblin", 20, 5),
+        Monster("Orc", 30, 10),
+        Monster("Dragon", 50, 20)
+    ]
+
+    while True:
+        print("\nChoose a monster to fight:")
+        for i, monster in enumerate(monsters):
+            print(f"{i+1}. {monster.name} (Health: {monster.health}, Attack: {monster.attack})")
+        choice = int(input("Enter the number of the monster: ")) - 1
+        monster = monsters[choice]
+        combat(player, monster)
+        if player.health <= 0:
+            break
+
+if __name__ == "__main__":
+    main()
