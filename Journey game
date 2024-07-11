@@ -1,0 +1,73 @@
+import random
+
+class Question:
+    def __init__(self, question, a1, a2, a3, a4, answer, ansNum):
+        self.question = question
+        self.a1 = a1
+        self.a2 = a2
+        self.a3 = a3
+        self.a4 = a4
+        self.answer = answer
+        self.ansNum = ansNum
+
+    @classmethod
+    def getQuestion(cls, triviaDict):
+        randomGenerator = random.sample(range(1, 817), 1)
+        for i in randomGenerator:
+            question = triviaDict[i][0]
+            a1 = triviaDict[i][1]
+            a2 = triviaDict[i][2]
+            a3 = triviaDict[i][3]
+            a4 = triviaDict[i][4]
+            answer = triviaDict[i][5]
+            ansNum = triviaDict[i][6]
+        aQuestion = Question(question, a1, a2, a3, a4, answer, ansNum)
+        return aQuestion
+
+    @classmethod
+    def setupAsk(cls, q):
+        print('\n', q.question, '\n\t1: ', q.a1, ' \n\t2: ', q.a2, '\n\t3: ', q.a3, ' \n\t4: ', q.a4, '\n')
+        while True:
+            try:
+                choice = int(input("\nWhat's your answer? \n--> "))
+            except ValueError:
+                print('\nSorry, the answer only accepts numbers; please enter a number 1-4')
+                choice = int(input("\nWhat's your answer? \n--> "))
+            finally:
+                if choice in range(1, 5):
+                    break
+        if choice == q.ansNum:
+            print('\nCorrect! \n', q.answer)
+            return True
+        elif choice != q.ansNum:
+            print('\nIncorrect!  \n', q.answer)
+            return False
+
+class Data:
+    def __init__(self, filetype):
+        self.filetype = filetype
+
+    def openFile(self, filename):
+        with open(filename, 'r') as f:
+            reader = csv.reader(f)
+            triviaDict = {i: row for i, row in enumerate(reader, 1)}
+        return triviaDict
+
+def createQuestionsAnswers():
+    data = Data('csv')
+    triviaDict = data.openFile('trivia.csv')
+    questions = []
+    for _ in range(10):
+        question = Question.getQuestion(triviaDict)
+        questions.append(question)
+    return questions
+
+def playGame():
+    questions = createQuestionsAnswers()
+    score = 0
+    for question in questions:
+        if Question.setupAsk(question):
+            score += 1
+    print('\nYour final score is:', score)
+
+playGame()
