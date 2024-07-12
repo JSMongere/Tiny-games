@@ -1,0 +1,34 @@
+import random
+
+def lamp_game():
+    # Initialize the lamp state (on or off)
+    lamp_state = False
+
+    while True:
+        # Display the current lamp state
+        print("Lamp is", "on" if lamp_state else "off")
+
+        # Get user input (1 to turn on, 0 to turn off, or q to quit)
+        user_input = input("Enter 1 to turn on, 0 to turn off, or q to quit: ")
+
+        if user_input.lower() == 'q':
+            # Quit the game
+            print("Goodbye!")
+            break
+        elif user_input == '1':
+            # Turn on the lamp
+            lamp_state = True
+        elif user_input == '0':
+            # Turn off the lamp
+            lamp_state = False
+        else:
+            # Invalid input, try again
+            print("Invalid input. Try again!")
+
+        # Simulate a random event (e.g., a power outage)
+        if random.random() < 0.1:
+            lamp_state = not lamp_state
+            print("Power outage! Lamp is now", "on" if lamp_state else "off")
+
+if __name__ == "__main__":
+    lamp_game()
