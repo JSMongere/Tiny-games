@@ -1,0 +1,68 @@
+import pygame
+import random
+
+# Window dimensions
+WIDTH, HEIGHT = 800, 600
+
+# Circle properties
+PLAYER_RADIUS = 20
+ENEMY_RADIUS = 20
+
+# Colors
+PLAYER_COLOR = (0, 0, 255)
+ENEMY_COLOR = (255, 0, 0)
+
+class Circle:
+    def __init__(self, x, y, radius, color):
+        self.x = x
+        self.y = y
+        self.radius = radius
+        self.color = color
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, self.color, (self.x, self.y), self.radius)
+
+    def move(self, dx, dy):
+        self.x += dx
+        self.y += dy
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    clock = pygame.time.Clock()
+
+    player = Circle(WIDTH / 2, HEIGHT - 50, PLAYER_RADIUS, PLAYER_COLOR)
+    enemies = [Circle(random.randint(0, WIDTH), -ENEMY_RADIUS, ENEMY_RADIUS, ENEMY_COLOR) for _ in range(10)]
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            player.move(-5, 0)
+        if keys[pygame.K_RIGHT]:
+            player.move(5, 0)
+
+        for enemy in enemies:
+            enemy.move(0, 5)
+            if enemy.y > HEIGHT:
+                enemy.y = -ENEMY_RADIUS
+                enemy.x = random.randint(0, WIDTH)
+
+            if (player.x - enemy.x) ** 2 + (player.y - enemy.y) ** 2 <= (player.radius + enemy.radius) ** 2:
+                running = False
+
+        screen.fill((0, 0, 0))
+        player.draw(screen)
+        for enemy in enemies:
+            enemy.draw(screen)
+        pygame.display.flip()
+        clock.tick(60)
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
