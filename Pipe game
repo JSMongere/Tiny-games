@@ -1,0 +1,80 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 640, 480
+PIPE_WIDTH, PIPE_HEIGHT = 80, 480
+GAP_SIZE = 150
+BIRD_SIZE = 40
+
+# Set up some colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the font
+font = pygame.font.Font(None, 36)
+
+# Set up the bird
+bird_x, bird_y = WIDTH / 2, HEIGHT / 2
+bird_speed = 0
+
+# Set up the pipes
+pipes = []
+pipe_timer = 0
+
+# Game loop
+while True:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                bird_speed = -10
+
+    # Move the bird
+    bird_y += bird_speed
+    bird_speed += 0.5
+
+    # Add new pipes
+    pipe_timer += 1
+    if pipe_timer > 100:
+        pipe_timer = 0
+        pipe_x = WIDTH
+        pipe_y = random.randint(0, HEIGHT - GAP_SIZE - PIPE_HEIGHT)
+        pipes.append((pipe_x, pipe_y))
+
+    # Move the pipes
+    for i, (pipe_x, pipe_y) in enumerate(pipes):
+        pipe_x -= 5
+        if pipe_x < -PIPE_WIDTH:
+            del pipes[i]
+        else:
+            pipes[i] = (pipe_x, pipe_y)
+
+    # Check for collisions
+    for pipe_x, pipe_y in pipes:
+        if (bird_x + BIRD_SIZE > pipe_x and
+            bird_x < pipe_x + PIPE_WIDTH and
+            (bird_y < pipe_y or bird_y + BIRD_SIZE > pipe_y + GAP_SIZE)):
+            print("Game Over!")
+            pygame.quit()
+            sys.exit()
+
+    # Draw everything
+    screen.fill(WHITE)
+    pygame.draw.rect(screen, BLACK, (bird_x, bird_y, BIRD_SIZE, BIRD_SIZE))
+    for pipe_x, pipe_y in pipes:
+        pygame.draw.rect(screen, BLACK, (pipe_x, 0, PIPE_WIDTH, pipe_y))
+        pygame.draw.rect(screen, BLACK, (pipe_x, pipe_y + GAP_SIZE, PIPE_WIDTH, HEIGHT - pipe_y - GAP_SIZE))
+    pygame.display.flip()
+
+    # Cap the frame rate
+    pygame.time.delay(1000 // 60)
