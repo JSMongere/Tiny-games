@@ -1,0 +1,62 @@
+import random
+
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.health = 100
+
+    def is_alive(self):
+        return self.health > 0
+
+    def attack(self, enemy):
+        damage = random.randint(10, 20)
+        enemy.health -= damage
+        print(f"{self.name} attacks {enemy.name} for {damage} damage!")
+
+    def __str__(self):
+        return f"{self.name} (Health: {self.health})"
+
+
+class Enemy:
+    def __init__(self, name):
+        self.name = name
+        self.health = 50
+
+    def is_alive(self):
+        return self.health > 0
+
+    def attack(self, player):
+        damage = random.randint(10, 20)
+        player.health -= damage
+        print(f"{self.name} attacks {player.name} for {damage} damage!")
+
+    def __str__(self):
+        return f"{self.name} (Health: {self.health})"
+
+
+def game():
+    player_name = input("Enter your name: ")
+    player = Player(player_name)
+    enemy = Enemy("Slasher")
+
+    while player.is_alive() and enemy.is_alive():
+        print(f"\n{player}\n{enemy}\n")
+        action = input("Do you want to (A)ttack or (R)un? ").lower()
+        if action == "a":
+            player.attack(enemy)
+            if enemy.is_alive():
+                enemy.attack(player)
+        elif action == "r":
+            print("You run away!")
+            break
+        else:
+            print("Invalid action. Please try again.")
+
+    if player.is_alive():
+        print(f"\nCongratulations, {player.name}! You defeated the Slasher!")
+    else:
+        print(f"\nGame over. The Slasher killed {player.name}.")
+
+
+if __name__ == "__main__":
+    game()
