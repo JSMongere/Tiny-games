@@ -1,0 +1,30 @@
+import random
+import matplotlib.pyplot as plt
+
+class ChartGame:
+    def __init__(self):
+        self.scores = []
+
+    def play_round(self):
+        score = random.randint(1, 10)
+        self.scores.append(score)
+        print(f"Round {len(self.scores)}: You scored {score} points!")
+
+    def display_chart(self):
+        plt.plot(self.scores)
+        plt.xlabel("Round")
+        plt.ylabel("Score")
+        plt.title("Chart Game Scores")
+        plt.show()
+
+    def play_game(self):
+        while True:
+            self.play_round()
+            response = input("Do you want to play another round? (y/n): ")
+            if response.lower()!= 'y':
+                break
+        self.display_chart()
+
+if __name__ == "__main__":
+    game = ChartGame()
+    game.play_game()
