@@ -1,0 +1,36 @@
+# The Cursed Temple Game
+
+# Define the game variables
+player_health = 100
+player_location = "entrance"
+treasures_collected = 0
+
+# Define the game locations
+locations = {
+    "entrance": {"description": "You are standing at the entrance of the temple.", "exits": ["hallway"]},
+    "hallway": {"description": "You are in a long, dark hallway.", "exits": ["entrance", "chamber"]},
+    "chamber": {"description": "You are in a grand chamber filled with treasures.", "exits": ["hallway"], "treasure": True}
+}
+
+# Define the game loop
+while True:
+    # Print the current location description
+    print(locations[player_location]["description"])
+
+    # Check if the current location has a treasure
+    if "treasure" in locations[player_location]:
+        print("You found a treasure!")
+        treasures_collected += 1
+        del locations[player_location]["treasure"]
+
+    # Get the user input
+    command = input("> ").lower()
+
+    # Handle movement commands
+    if command in locations[player_location]["exits"]:
+        player_location = command
+    elif command == "quit":
+        print("You escaped the temple with", treasures_collected, "treasures!")
+        break
+    else:
+        print("Invalid command. Try 'north', 'south', 'east', or 'west' to move, or 'quit' to exit the game.")
