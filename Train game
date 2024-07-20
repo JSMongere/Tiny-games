@@ -1,0 +1,65 @@
+class TrainGame:
+    def __init__(self):
+        self.train_cars = 5
+        self.passengers = 0
+        self.stations = ["Station A", "Station B", "Station C", "Station D", "Station E"]
+        self.current_station = 0
+
+    def display_status(self):
+        print(f"Current Station: {self.stations[self.current_station]}")
+        print(f"Number of Train Cars: {self.train_cars}")
+        print(f"Number of Passengers: {self.passengers}")
+
+    def add_train_car(self):
+        self.train_cars += 1
+        print("Added a new train car!")
+
+    def remove_train_car(self):
+        if self.train_cars > 0:
+            self.train_cars -= 1
+            print("Removed a train car!")
+        else:
+            print("You can't remove a train car because there are no cars left!")
+
+    def add_passenger(self):
+        self.passengers += 1
+        print("Added a new passenger!")
+
+    def remove_passenger(self):
+        if self.passengers > 0:
+            self.passengers -= 1
+            print("Removed a passenger!")
+        else:
+            print("You can't remove a passenger because there are no passengers left!")
+
+    def move_to_next_station(self):
+        if self.current_station < len(self.stations) - 1:
+            self.current_station += 1
+            print(f"Moved to {self.stations[self.current_station]}")
+        else:
+            print("You're already at the last station!")
+
+    def play(self):
+        while True:
+            self.display_status()
+            action = input("What would you like to do? (add car, remove car, add passenger, remove passenger, move, quit): ")
+            if action == "add car":
+                self.add_train_car()
+            elif action == "remove car":
+                self.remove_train_car()
+            elif action == "add passenger":
+                self.add_passenger()
+            elif action == "remove passenger":
+                self.remove_passenger()
+            elif action == "move":
+                self.move_to_next_station()
+            elif action == "quit":
+                print("Thanks for playing!")
+                break
+            else:
+                print("Invalid action. Please try again.")
+
+
+if __name__ == "__main__":
+    game = TrainGame()
+    game.play()
