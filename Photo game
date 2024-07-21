@@ -1,0 +1,44 @@
+import os
+import random
+from PIL import Image
+
+# List of image files
+image_files = [f for f in os.listdir('images') if f.endswith('.jpg') or f.endswith('.png')]
+
+# Initialize the score
+score = 0
+
+# Show the first image
+current_image = random.choice(image_files)
+Image.open(os.path.join('images', current_image)).show()
+
+while True:
+    # Ask the user if the next image will be the same
+    user_input = input("Will the next image be the same? (y/n): ")
+
+    # Show the next image
+    next_image = random.choice(image_files)
+    Image.open(os.path.join('images', next_image)).show()
+
+    # Check if the user's answer was correct
+    if user_input.lower() == 'y' and next_image == current_image:
+        print("Correct!")
+        score += 1
+    elif user_input.lower() == 'n' and next_image != current_image:
+        print("Correct!")
+        score += 1
+    else:
+        print("Incorrect.")
+
+    # Update the current image
+    current_image = next_image
+
+    # Print the score
+    print(f"Score: {score}")
+
+    # Ask the user if they want to continue
+    play_again = input("Do you want to play again? (y/n): ")
+    if play_again.lower() != 'y':
+        break
+
+print("Thanks for playing!")
