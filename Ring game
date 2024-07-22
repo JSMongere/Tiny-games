@@ -1,0 +1,50 @@
+import turtle
+
+# Set up the screen
+win = turtle.Screen()
+win.bgcolor("white")
+
+# Create a new turtle object
+ring = turtle.Turtle()
+ring.speed(2)
+
+# Set the thickness for each ring
+ring.width(10)
+
+# Draw the blue ring
+ring.color("blue")
+ring.penup()
+ring.goto(-120, 60)
+ring.pendown()
+ring.circle(50)
+
+# Draw the yellow ring
+ring.color("yellow")
+ring.penup()
+ring.goto(-40, 60)
+ring.pendown()
+ring.circle(50)
+
+# Draw the black ring
+ring.color("black")
+ring.penup()
+ring.goto(40, 60)
+ring.pendown()
+ring.circle(50)
+
+# Draw the green ring
+ring.color("green")
+ring.penup()
+ring.goto(-80, 10)
+ring.pendown()
+ring.circle(50)
+
+# Draw the red ring
+ring.color("red")
+ring.penup()
+ring.goto(0, 10)
+ring.pendown()
+ring.circle(50)
+
+# Keep the window open
+turtle.done()
