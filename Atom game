@@ -1,0 +1,43 @@
+import random
+
+class AtomGame:
+    def __init__(self):
+        self.atoms = 20
+        self.player_turn = True
+
+    def display_atoms(self):
+        print(f"Atoms remaining: {self.atoms}")
+
+    def take_atoms(self, num_atoms):
+        if num_atoms < 1 or num_atoms > 3:
+            print("Invalid move. You can take 1, 2, or 3 atoms.")
+            return False
+        if num_atoms > self.atoms:
+            print("Not enough atoms remaining.")
+            return False
+        self.atoms -= num_atoms
+        self.player_turn = not self.player_turn
+        return True
+
+    def computer_move(self):
+        num_atoms = random.randint(1, 3)
+        print(f"Computer takes {num_atoms} atoms.")
+        self.take_atoms(num_atoms)
+
+    def play(self):
+        while self.atoms > 0:
+            self.display_atoms()
+            if self.player_turn:
+                num_atoms = int(input("Enter the number of atoms to take (1-3): "))
+                if not self.take_atoms(num_atoms):
+                    continue
+            else:
+                self.computer_move()
+            if self.atoms == 0:
+                if self.player_turn:
+                    print("Computer wins!")
+                else:
+                    print("You win!")
+
+game = AtomGame()
+game.play()
