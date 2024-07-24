@@ -1,0 +1,55 @@
+import random
+
+class Room:
+    def __init__(self):
+        self.doors = {
+            'north': {'locked': True, 'puzzle': self.puzzle_north},
+            'south': {'locked': True, 'puzzle': self.puzzle_south}
+        }
+
+    def puzzle_north(self):
+        # Simple math puzzle
+        num1 = random.randint(1, 10)
+        num2 = random.randint(1, 10)
+        answer = num1 + num2
+        user_answer = input(f"What is {num1} + {num2}? ")
+        if int(user_answer) == answer:
+            return True
+        else:
+            return False
+
+    def puzzle_south(self):
+        # Simple word puzzle
+        word = random.choice(['apple', 'banana', 'cherry'])
+        scrambled_word = ''.join(random.sample(word, len(word)))
+        user_answer = input(f"Unscramble the word: {scrambled_word} ")
+        if user_answer.lower() == word:
+            return True
+        else:
+            return False
+
+    def unlock_door(self, direction):
+        if self.doors[direction]['locked']:
+            if self.doors[direction]['puzzle']():
+                self.doors[direction]['locked'] = False
+                print(f"You unlocked the {direction} door!")
+            else:
+                print(f"You failed to unlock the {direction} door.")
+        else:
+            print(f"The {direction} door is already unlocked.")
+
+    def play(self):
+        print("You are trapped in a room with two doors.")
+        while True:
+            direction = input("Which door do you want to try? (north/south) ")
+            if direction in self.doors:
+                self.unlock_door(direction)
+                if not self.doors[direction]['locked']:
+                    print("You escaped!")
+                    break
+            else:
+                print("Invalid direction. Try again.")
+
+if __name__ == "__main__":
+    room = Room()
+    room.play()
