@@ -1,0 +1,69 @@
+import random
+
+class Flower:
+    def __init__(self, name):
+        self.name = name
+        self.stage = "seed"
+
+    def water(self):
+        if self.stage == "seed":
+            self.stage = "sprout"
+        elif self.stage == "sprout":
+            self.stage = "bloom"
+
+    def harvest(self):
+        if self.stage == "bloom":
+            return f"You harvested a beautiful {self.name}!"
+        else:
+            return "The flower is not ready to be harvested."
+
+class Garden:
+    def __init__(self):
+        self.flowers = []
+
+    def plant(self, name):
+        self.flowers.append(Flower(name))
+
+    def water(self):
+        for flower in self.flowers:
+            flower.water()
+
+    def harvest(self):
+        for flower in self.flowers:
+            print(flower.harvest())
+
+def game():
+    garden = Garden()
+
+    while True:
+        print("\nGarden Game")
+        print("-----------")
+        print("1. Plant a flower")
+        print("2. Water the flowers")
+        print("3. Harvest the flowers")
+        print("4. Quit")
+
+        choice = input("What would you like to do? ")
+
+        if choice == "1":
+            name = input("What type of flower would you like to plant? ")
+            garden.plant(name)
+        elif choice == "2":
+            garden.water()
+        elif choice == "3":
+            garden.harvest()
+        elif choice == "4":
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+        # Check if all flowers are harvested or withered
+        if all(flower.stage == "bloom" for flower in garden.flowers):
+            print(" Congratulations, all flowers are harvested!")
+            break
+        elif all(flower.stage == "seed" for flower in garden.flowers):
+            print(" Oh no, all flowers are withered!")
+            break
+
+if __name__ == "__main__":
+    game()
