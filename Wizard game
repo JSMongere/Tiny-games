@@ -1,0 +1,111 @@
+import random
+
+# Define a dictionary to store the player's stats
+player_stats = {
+    'health': 100,
+    'magic': 50,
+    'strength': 10,
+    'agility': 10,
+    'intelligence': 10
+}
+
+# Define a dictionary to store the player's inventory
+player_inventory = {
+    'gold': 0,
+    'items': []
+}
+
+# Define a dictionary to store the creatures in the forest
+creatures = {
+    'goblin': {'health': 20, 'attack': 5},
+    'troll': {'health': 50, 'attack': 10},
+    'dragon': {'health': 100, 'attack': 20}
+}
+
+# Define a dictionary to store the magical items in the forest
+magical_items = {
+    'healing_potion': {'health': 20},
+    'magic_wand': {'magic': 10},
+    'strength_potion': {'strength': 5}
+}
+
+# Function to handle player movement
+def move_player(direction):
+    if direction == 'north':
+        print("You move north through the forest.")
+    elif direction == 'south':
+        print("You move south through the forest.")
+    elif direction == 'east':
+        print("You move east through the forest.")
+    elif direction == 'west':
+        print("You move west through the forest.")
+    else:
+        print("Invalid direction. Please try again.")
+
+# Function to handle player combat
+def combat(creature):
+    while creature['health'] > 0:
+        print(f"You are fighting a {creature['name']}.")
+        action = input("What do you want to do? (attack, run, use item) ")
+        if action == 'attack':
+            damage = random.randint(0, player_stats['strength'])
+            creature['health'] -= damage
+            print(f"You deal {damage} damage to the {creature['name']}.")
+        elif action == 'run':
+            print("You run away from the creature.")
+            break
+        elif action == 'use item':
+            item = input("What item do you want to use? ")
+            if item in player_inventory['items']:
+                if item == 'healing_potion':
+                    player_stats['health'] += magical_items[item]['health']
+                    print(f"You use a {item} and heal for {magical_items[item]['health']} health.")
+                elif item == 'magic_wand':
+                    player_stats['magic'] += magical_items[item]['magic']
+                    print(f"You use a {item} and gain {magical_items[item]['magic']} magic.")
+                elif item == 'strength_potion':
+                    player_stats['strength'] += magical_items[item]['strength']
+                    print(f"You use a {item} and gain {magical_items[item]['strength']} strength.")
+            else:
+                print("You don't have that item in your inventory.")
+        else:
+            print("Invalid action. Please try again.")
+
+# Function to handle player inventory management
+def manage_inventory():
+    print("You are managing your inventory.")
+    action = input("What do you want to do? (view, add, remove) ")
+    if action == 'view':
+        print("Your inventory:")
+        print(f"Gold: {player_inventory['gold']}")
+        print("Items:")
+        for item in player_inventory['items']:
+            print(item)
+    elif action == 'add':
+        item = input("What item do you want to add to your inventory? ")
+        if item in magical_items:
+            player_inventory['items'].append(item)
+            print(f"You add a {item} to your inventory.")
+        else:
+            print("That item doesn't exist.")
+    elif action == 'remove':
+        item = input("What item do you want to remove from your inventory? ")
+        if item in player_inventory['items']:
+            player_inventory['items'].remove(item)
+            print(f"You remove a {item} from your inventory.")
+        else:
+            print("You don't have that item in your inventory.")
+    else:
+        print("Invalid action. Please try again.")
+
+# Main game loop
+while True:
+    print("You are in the magical forest.")
+    action = input("What do you want to do? (move, combat, inventory, quit) ")
+    if action == 'move':
+        direction = input("What direction do you want to move? (north, south, east, west) ")
+        move_player(direction)
+    elif action == 'combat':
+        creature = random.choice(list(creatures.values()))
+        combat(creature)
+    elif action == 'inventory':
