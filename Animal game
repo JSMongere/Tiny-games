@@ -1,0 +1,29 @@
+import random
+
+# Define a dictionary of animals with their characteristics
+animals = {
+    "lion": {"mammal": True, "carnivore": True, "big": True},
+    "elephant": {"mammal": True, "carnivore": False, "big": True},
+    "giraffe": {"mammal": True, "carnivore": False, "big": True},
+    "zebra": {"mammal": True, "carnivore": False, "big": False},
+    "snake": {"mammal": False, "carnivore": True, "big": False},
+    "bird": {"mammal": False, "carnivore": False, "big": False}
+}
+
+def play_game():
+    print("Think of an animal...")
+    questions = ["Is your animal a mammal?", "Is your animal a carnivore?", "Is your animal big?"]
+    answers = []
+    for question in questions:
+        answer = input(question + " (yes/no): ")
+        answers.append(answer.lower() == "yes")
+
+    # Find the animal that matches the user's answers
+    for animal, characteristics in animals.items():
+        if all(answers[i] == characteristics[question.split()[2]] for i, question in enumerate(questions)):
+            print("I think your animal is a", animal)
+            return
+
+    print("I couldn't guess your animal!")
+
+play_game()
