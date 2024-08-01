@@ -1,0 +1,54 @@
+import random
+
+class Farmer:
+    def __init__(self, name):
+        self.name = name
+        self.energy = 100
+        self.money = 0
+        self.crops = ["wheat", "carrots", "potatoes"]
+
+    def harvest(self, crop):
+        if self.energy >= 10:
+            self.energy -= 10
+            earnings = random.randint(10, 20)
+            self.money += earnings
+            print(f"You harvested {crop} and earned ${earnings}.")
+        else:
+            print("You don't have enough energy to harvest.")
+
+    def rest(self):
+        self.energy += 10
+        if self.energy > 100:
+            self.energy = 100
+        print("You rested and regained some energy.")
+
+def game():
+    farmer = Farmer(input("Enter your name: "))
+    while True:
+        print("\n" + "="*20)
+        print(f"Farmer {farmer.name}'s Status:")
+        print(f"Energy: {farmer.energy}")
+        print(f"Money: ${farmer.money}")
+        print("="*20 + "\n")
+        print("1. Harvest wheat")
+        print("2. Harvest carrots")
+        print("3. Harvest potatoes")
+        print("4. Rest")
+        print("5. Quit")
+        choice = input("What would you like to do? ")
+        if choice == "1":
+            farmer.harvest("wheat")
+        elif choice == "2":
+            farmer.harvest("carrots")
+        elif choice == "3":
+            farmer.harvest("potatoes")
+        elif choice == "4":
+            farmer.rest()
+        elif choice == "5":
+            print("Thanks for playing!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    game()
