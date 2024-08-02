@@ -1,0 +1,70 @@
+import pygame
+import sys
+
+# Initialize Pygame
+pygame.init()
+
+# Set up some constants
+WIDTH, HEIGHT = 640, 480
+FLY_SIZE = 50
+OBSTACLE_SIZE = 100
+
+# Set up some colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+# Set up the display
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+# Set up the font
+font = pygame.font.Font(None, 36)
+
+# Set up the fly
+fly_x, fly_y = WIDTH // 2, HEIGHT // 2
+fly_speed_x, fly_speed_y = 5, 5
+
+# Set up the obstacles
+obstacles = [
+    pygame.Rect(0, 0, OBSTACLE_SIZE, OBSTACLE_SIZE),
+    pygame.Rect(WIDTH - OBSTACLE_SIZE, 0, OBSTACLE_SIZE, OBSTACLE_SIZE),
+    pygame.Rect(0, HEIGHT - OBSTACLE_SIZE, OBSTACLE_SIZE, OBSTACLE_SIZE),
+    pygame.Rect(WIDTH - OBSTACLE_SIZE, HEIGHT - OBSTACLE_SIZE, OBSTACLE_SIZE, OBSTACLE_SIZE)
+]
+
+# Game loop
+while True:
+    # Handle events
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+    # Move the fly
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        fly_y -= fly_speed_y
+    if keys[pygame.K_DOWN]:
+        fly_y += fly_speed_y
+    if keys[pygame.K_LEFT]:
+        fly_x -= fly_speed_x
+    if keys[pygame.K_RIGHT]:
+        fly_x += fly_speed_x
+
+    # Collision detection
+    for obstacle in obstacles:
+        if obstacle.collidepoint(fly_x, fly_y):
+            print("Game Over")
+            pygame.quit()
+            sys.exit()
+
+    # Draw everything
+    screen.fill(BLACK)
+    pygame.draw.rect(screen, WHITE, (fly_x, fly_y, FLY_SIZE, FLY_SIZE))
+    for obstacle in obstacles:
+        pygame.draw.rect(screen, WHITE, obstacle)
+    text = font.render("Fly Game", True, WHITE)
+    screen.blit(text, (10, 10))
+
+    # Update the display
+    pygame.display.flip()
+    pygame.time.Clock().tick(60)
