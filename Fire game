@@ -1,0 +1,44 @@
+import random
+import time
+
+class FireGame:
+    def __init__(self):
+        self.player_position = 0
+        self.fireball_position = random.randint(1, 10)
+
+    def display_game_state(self):
+        print("\n" + "-" * 20)
+        for i in range(1, 11):
+            if i == self.player_position:
+                print("P", end=" ")
+            elif i == self.fireball_position:
+                print("F", end=" ")
+            else:
+                print(".", end=" ")
+        print("\n" + "-" * 20)
+
+    def update_fireball_position(self):
+        self.fireball_position = random.randint(1, 10)
+
+    def check_collision(self):
+        if self.player_position == self.fireball_position:
+            return True
+        return False
+
+    def play(self):
+        while True:
+            self.display_game_state()
+            move = input("Enter your move (left/right): ")
+            if move.lower() == "left" and self.player_position > 1:
+                self.player_position -= 1
+            elif move.lower() == "right" and self.player_position < 10:
+                self.player_position += 1
+            self.update_fireball_position()
+            if self.check_collision():
+                print("Game Over! You got hit by a fireball.")
+                break
+            time.sleep(1)
+
+if __name__ == "__main__":
+    game = FireGame()
+    game.play()
