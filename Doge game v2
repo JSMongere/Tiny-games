@@ -1,0 +1,62 @@
+import random
+
+class Doge:
+    def __init__(self, name):
+        self.name = name
+        self.happiness = 50
+        self.hunger = 50
+        self.tiredness = 50
+
+    def feed(self):
+        self.hunger -= 10
+        self.happiness += 5
+        print(f"You fed {self.name}! Hunger is now {self.hunger}.")
+
+    def play(self):
+        self.happiness += 10
+        self.tiredness += 5
+        print(f"You played with {self.name}! Happiness is now {self.happiness}.")
+
+    def belly_rub(self):
+        self.happiness += 15
+        self.tiredness -= 5
+        print(f"You gave {self.name} a belly rub! Happiness is now {self.happiness}.")
+
+    def check_status(self):
+        print(f"{self.name}'s status:")
+        print(f"Happiness: {self.happiness}")
+        print(f"Hunger: {self.hunger}")
+        print(f"Tiredness: {self.tiredness}")
+
+def game_loop(doge):
+    while True:
+        print("\nWhat would you like to do?")
+        print("1. Feed Doge")
+        print("2. Play with Doge")
+        print("3. Give Doge a belly rub")
+        print("4. Check Doge's status")
+        print("5. Quit")
+
+        choice = input("> ")
+
+        if choice == "1":
+            doge.feed()
+        elif choice == "2":
+            doge.play()
+        elif choice == "3":
+            doge.belly_rub()
+        elif choice == "4":
+            doge.check_status()
+        elif choice == "5":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+def main():
+    doge_name = input("What would you like to name your Doge? ")
+    doge = Doge(doge_name)
+    game_loop(doge)
+
+if __name__ == "__main__":
+    main()
