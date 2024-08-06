@@ -1,0 +1,79 @@
+import random
+
+class Player:
+    def __init__(self):
+        self.health = 100
+        self.attack = 10
+        self.defense = 5
+        self.points = 0
+
+    def is_alive(self):
+        return self.health > 0
+
+    def upgrade_health(self):
+        self.health += 10
+        self.points -= 10
+
+    def upgrade_attack(self):
+        self.attack += 5
+        self.points -= 10
+
+    def upgrade_defense(self):
+        self.defense += 5
+        self.points -= 10
+
+class Enemy:
+    def __init__(self):
+        self.health = random.randint(20, 50)
+        self.attack = random.randint(5, 15)
+
+    def is_alive(self):
+        return self.health > 0
+
+def battle(player, enemy):
+    while player.is_alive() and enemy.is_alive():
+        print(f"Player Health: {player.health}, Enemy Health: {enemy.health}")
+        action = input("Attack (A) or Defend (D)? ")
+        if action.upper() == "A":
+            enemy.health -= player.attack
+            player.health -= enemy.attack
+        elif action.upper() == "D":
+            player.health += player.defense
+            enemy.health -= player.attack
+        else:
+            print("Invalid action!")
+    if player.is_alive():
+        print("You defeated the enemy!")
+        player.points += 10
+    else:
+        print("You died!")
+
+def game_loop():
+    player = Player()
+    while player.is_alive():
+        print(f"Health: {player.health}, Attack: {player.attack}, Defense: {player.defense}, Points: {player.points}")
+        action = input("Battle (B), Upgrade (U), or Quit (Q)? ")
+        if action.upper() == "B":
+            enemy = Enemy()
+            battle(player, enemy)
+        elif action.upper() == "U":
+            print("Upgrade:")
+            print("1. Health (+10)")
+            print("2. Attack (+5)")
+            print("3. Defense (+5)")
+            choice = input("Choose an upgrade: ")
+            if choice == "1" and player.points >= 10:
+                player.upgrade_health()
+            elif choice == "2" and player.points >= 10:
+                player.upgrade_attack()
+            elif choice == "3" and player.points >= 10:
+                player.upgrade_defense()
+            else:
+                print("Insufficient points!")
+        elif action.upper() == "Q":
+            break
+        else:
+            print("Invalid action!")
+
+if __name__ == "__main__":
+    game_loop()
