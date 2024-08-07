@@ -1,0 +1,47 @@
+import random
+
+class ConstructionGame:
+    def __init__(self):
+        self.budget = 1000000
+        self.buildings = []
+        self.roads = []
+
+    def display_status(self):
+        print(f"Budget: ${self.budget}")
+        print(f"Buildings: {len(self.buildings)}")
+        print(f"Roads: {len(self.roads)}")
+
+    def construct_building(self):
+        cost = random.randint(50000, 200000)
+        if cost <= self.budget:
+            self.budget -= cost
+            self.buildings.append("Building")
+            print(f"Building constructed for ${cost}")
+        else:
+            print("Insufficient budget")
+
+    def construct_road(self):
+        cost = random.randint(20000, 100000)
+        if cost <= self.budget:
+            self.budget -= cost
+            self.roads.append("Road")
+            print(f"Road constructed for ${cost}")
+        else:
+            print("Insufficient budget")
+
+    def play_game(self):
+        while True:
+            self.display_status()
+            action = input("Enter 'b' to construct a building, 'r' to construct a road, or 'q' to quit: ")
+            if action.lower() == 'b':
+                self.construct_building()
+            elif action.lower() == 'r':
+                self.construct_road()
+            elif action.lower() == 'q':
+                break
+            else:
+                print("Invalid input")
+
+if __name__ == "__main__":
+    game = ConstructionGame()
+    game.play_game()
