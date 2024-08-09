@@ -1,0 +1,73 @@
+class Player:
+    def __init__(self):
+        self.inventory = []
+
+    def collect_item(self, item):
+        """Add an item to the player's inventory"""
+        self.inventory.append(item)
+        print(f"You collected {item}!")
+
+    def view_inventory(self):
+        """Print out the player's inventory"""
+        print("Your inventory:")
+        for item in self.inventory:
+            print(item)
+
+    def remove_item(self, item):
+        """Remove an item from the player's inventory"""
+        if item in self.inventory:
+            self.inventory.remove(item)
+            print(f"You removed {item} from your inventory!")
+        else:
+            print(f"You don't have {item} in your inventory!")
+
+
+class Game:
+    def __init__(self):
+        self.player = Player()
+        self.items = ["sword", "shield", "potion"]
+
+    def start_game(self):
+        print("Welcome to the collectable game!")
+        while True:
+            print("\nWhat do you want to do?")
+            print("1. Collect item")
+            print("2. View inventory")
+            print("3. Remove item")
+            print("4. Quit game")
+            choice = input("Enter your choice: ")
+            if choice == "1":
+                self.collect_item()
+            elif choice == "2":
+                self.player.view_inventory()
+            elif choice == "3":
+                self.remove_item()
+            elif choice == "4":
+                print("Thanks for playing!")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
+    def collect_item(self):
+        print("\nAvailable items:")
+        for i, item in enumerate(self.items):
+            print(f"{i+1}. {item}")
+        choice = input("Enter the number of the item you want to collect: ")
+        try:
+            choice = int(choice)
+            if 1 <= choice <= len(self.items):
+                item = self.items[choice - 1]
+                self.player.collect_item(item)
+            else:
+                print("Invalid choice. Please try again.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    def remove_item(self):
+        item = input("Enter the item you want to remove: ")
+        self.player.remove_item(item)
+
+
+if __name__ == "__main__":
+    game = Game()
+    game.start_game()
