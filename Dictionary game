@@ -1,0 +1,51 @@
+import random
+
+# Dictionary of words
+word_dict = {
+    "fruit": ["apple", "banana", "cherry", "date", "elderberry"],
+    "animal": ["cat", "dog", "elephant", "flamingo", "giraffe"],
+    "city": ["new york", "los angeles", "chicago", "houston", "phoenix"]
+}
+
+def play_game():
+    # Choose a random category
+    category = random.choice(list(word_dict.keys()))
+
+    # Choose a random word from the category
+    word = random.choice(word_dict[category])
+
+    # Create a blank spaces for the word
+    blank_spaces = ["_"] * len(word)
+
+    # Initialize the number of attempts
+    attempts = 6
+
+    print(f"Welcome to the dictionary game! You have {attempts} attempts to guess the word.")
+    print(f"Category: {category}")
+    print(" ".join(blank_spaces))
+
+    while attempts > 0:
+        # Get the user's guess
+        guess = input("Enter a letter: ").lower()
+
+        # Check if the guess is in the word
+        if guess in word:
+            # Reveal the correct letters
+            for i in range(len(word)):
+                if word[i] == guess:
+                    blank_spaces[i] = guess
+            print(" ".join(blank_spaces))
+        else:
+            # Decrease the number of attempts
+            attempts -= 1
+            print(f"Incorrect! You have {attempts} attempts left.")
+
+        # Check if the user has won
+        if "_" not in blank_spaces:
+            print("Congratulations! You won!")
+            return
+
+    # If the user has run out of attempts, they lose
+    print(f"Game over! The word was {word}.")
+
+play_game()
